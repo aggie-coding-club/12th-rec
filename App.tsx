@@ -57,7 +57,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="SignInScreen" component={SignInScreen} options={{ headerShown: false, title: "Sign In" }} />
-          <Stack.Screen name="SignUpSceen" component={SignUpScreen} options={{ presentation: "modal", title: "Sign Up" }} />
+          <Stack.Screen name="SignUpSceen" component={SignUpScreen} options={{ presentation: "modal", title: "Sign Up", headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
