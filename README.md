@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# 12th-rec
-=======
  
 # 12th Rec  
 
@@ -32,4 +29,3 @@ Start the server
 ~~~bash  
 expo start
 ~~~
->>>>>>> 54eb783dba46358b895f26d514f24dc9472e312d
