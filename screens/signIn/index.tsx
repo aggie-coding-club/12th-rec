@@ -2,15 +2,19 @@ import React, { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import useAppStore from "../../store/useAppStore";
 
 import { VStack, Text, Center, Input, Button, Image, ZStack, Link } from "native-base";
 import { app } from "../../firebase/firebaseConfig";
+import { Alert } from "react-native";
 
 interface Props {
     navigation: NativeStackNavigationProp<any, any>
 }
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
+    const setIsSignedIn = useAppStore((state) => state.setIsSignedIn)
+
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
@@ -19,11 +23,9 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
         const auth = getAuth(app);
 
-        const user = await signInWithEmailAndPassword(auth, email, password).catch((error) => console.log("Error"))
-
-        if(user) {
-            navigation.navigate("HomeScreen")
-        }
+        await signInWithEmailAndPassword(auth, email, password)
+            .then((res) => setIsSignedIn(true))
+            .catch((error) => Alert.alert("Incorrect username or password"))
     }
 
     const [fontsLoaded] = useFonts({

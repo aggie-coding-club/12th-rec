@@ -1,7 +1,8 @@
 import React from "react";
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeBaseProvider, extendTheme } from "native-base";
+import useAppStore from "./store/useAppStore";
 
 import SignInScreen from "./screens/signIn";
 import SignUpScreen from "./screens/signUp";
@@ -47,19 +48,41 @@ const theme = extendTheme({
       mono: "Inter",
     },
   },
-
-
 });
 
-export default function App() {  
+export default function App() {
+  const isSignedIn = useAppStore((state) => state.isSignedIn);
 
   return (
     <NativeBaseProvider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="SignInScreen" component={SignInScreen} options={{ headerShown: false, title: "Sign In" }} />
-          <Stack.Screen name="SignUpSceen" component={SignUpScreen} options={{ presentation: "modal", title: "Sign Up", headerShown: false }} />
-          <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ title: "Home" }} />
+          {!isSignedIn ? (
+            // No token found, user isn't signed in
+            <>
+              <Stack.Screen
+                name="SignInScreen"
+                component={SignInScreen}
+                options={{ headerShown: false, title: "Sign In" }}
+              />
+              <Stack.Screen
+                name="SignUpSceen"
+                component={SignUpScreen}
+                options={{
+                  presentation: "modal",
+                  title: "Sign Up",
+                  headerShown: false,
+                }}
+              />
+            </>
+          ) : (
+            // User is signed in
+            <Stack.Screen
+              name="HomeScreen"
+              component={HomeScreen}
+              options={{ title: "Home" }}
+            />
+          )}
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>

@@ -1,6 +1,7 @@
 import React, { useState }  from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
+import useAppStore from "../../store/useAppStore";
 
 import { VStack, Text, Input, Button, Image, ZStack, Box } from "native-base";
 import { app } from "../../firebase/firebaseConfig";
@@ -10,6 +11,8 @@ interface Props {
 }
 
 const SignUpScreen: React.FC<Props> = ({ navigation }) => {
+    const setIsSignedIn = useAppStore((state) => state.setIsSignedIn);
+
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -19,11 +22,9 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
         if(!name || !email || !password || !classification) return 
 
         const auth = getAuth(app);
-        const user = await createUserWithEmailAndPassword(auth, email, password).catch((error) => console.log("error"))
-
-        if(user) {
-            navigation.navigate("HomeScreen")
-        }
+        await createUserWithEmailAndPassword(auth, email, password)
+                .then((res) => setIsSignedIn(true))
+                .catch((Error) => alert(Error.code))
     }
 
     return (
