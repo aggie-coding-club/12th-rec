@@ -5,6 +5,7 @@ import { NativeBaseProvider, extendTheme } from "native-base";
 
 import SignInScreen from "./screens/signIn";
 import SignUpScreen from "./screens/signUp";
+import HomeScreen from "./screens/home";
 
 const Stack = createNativeStackNavigator();
 
@@ -58,6 +59,7 @@ export default function App() {
         <Stack.Navigator>
           <Stack.Screen name="SignInScreen" component={SignInScreen} options={{ headerShown: false, title: "Sign In" }} />
           <Stack.Screen name="SignUpSceen" component={SignUpScreen} options={{ presentation: "modal", title: "Sign Up", headerShown: false }} />
+          <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ title: "Home" }} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>

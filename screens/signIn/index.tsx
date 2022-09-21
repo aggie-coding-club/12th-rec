@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 
 import { VStack, Text, Center, Input, Button, Image, ZStack, Link } from "native-base";
+import { app } from "../../firebase/firebaseConfig";
 
 interface Props {
     navigation: NativeStackNavigationProp<any, any>
@@ -12,8 +14,16 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if(!email[0] || !password[0]) return
+
+        const auth = getAuth(app);
+
+        const user = await signInWithEmailAndPassword(auth, email, password).catch((error) => console.log("Error"))
+
+        if(user) {
+            navigation.navigate("HomeScreen")
+        }
     }
 
     const [fontsLoaded] = useFonts({
