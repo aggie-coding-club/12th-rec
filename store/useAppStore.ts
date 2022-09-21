@@ -1,13 +1,13 @@
 import create from 'zustand'
 
 interface AppState {
-  isSignedIn: boolean
-  setIsSignedIn: (isSignedIn: boolean) => void
+  userIsSignedIn: boolean
+  setUserIsSignedIn: (userIsSignedIn: boolean) => void
 }
 
 const useAppStore = create<AppState>()((set) => ({
-  isSignedIn: false,
-  setIsSignedIn: (isSignedIn) => set((state) => ({ isSignedIn })),
+  userIsSignedIn: false,
+  setUserIsSignedIn: (userIsSignedIn) => set((state) => ({ userIsSignedIn: userIsSignedIn })),
 }))
 
 export default useAppStore;

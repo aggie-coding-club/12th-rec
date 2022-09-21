@@ -12,7 +12,7 @@ interface Props {
 }
 
 const HomeScreen: React.FC<Props> = ({ route, navigation }) => {
-    const setIsSignedIn = useAppStore((state) => state.setIsSignedIn)
+    const setIsSignedIn = useAppStore((state) => state.setUserIsSignedIn)
 
     const auth = getAuth();
     const user = auth.currentUser

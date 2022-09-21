@@ -1,9 +1,10 @@
 import React, { useState }  from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
-import useAppStore from "../../store/useAppStore";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth"
 
-import { VStack, Text, Input, Button, Image, ZStack, Box } from "native-base";
+import { VStack, Text, Input, Button, Image, ZStack, Box, InputRightAddon, InputGroup } from "native-base";
+import { Alert } from "react-native";
+
 import { app } from "../../firebase/firebaseConfig";
 
 interface Props {
@@ -11,8 +12,6 @@ interface Props {
 }
 
 const SignUpScreen: React.FC<Props> = ({ navigation }) => {
-    const setIsSignedIn = useAppStore((state) => state.setIsSignedIn);
-
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -22,8 +21,12 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
         if(!name || !email || !password || !classification) return 
 
         const auth = getAuth(app);
-        await createUserWithEmailAndPassword(auth, email, password)
-                .then((res) => setIsSignedIn(true))
+        await createUserWithEmailAndPassword(auth, `${email}@tamu.edu`, password)
+                .then((user) => {
+                    sendEmailVerification(user.user)
+                    Alert.alert("Verify its you", "Please click the verification link we sent to your email")
+                    navigation.goBack()
+                })
                 .catch((Error) => alert(Error.code))
     }
 
@@ -49,9 +52,11 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
                             <Input value={classification} type="text" placeholder="Sophomore" color="white" onChangeText={(classification) => setClassification(classification)} />
                         </VStack>
 
-                        <VStack marginY={2}>
+                        <VStack marginY={2} >
                             <Text color="light.100" fontWeight="bold" marginY={1}>Email</Text>
-                            <Input value={email} type="email" placeholder="johndoe@gmail.com" color="white" onChangeText={(email) => setEmail(email)} />
+                            <InputGroup>
+                                <Input width="full" value={email} type="email" placeholder="john.doe" color="white" onChangeText={(email) => setEmail(email)} InputRightElement={<InputRightAddon children={"@tamu.edu"} />} />
+                            </InputGroup>
                         </VStack>
 
                         <VStack marginY={2}>

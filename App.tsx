@@ -2,11 +2,12 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeBaseProvider, extendTheme } from "native-base";
-import useAppStore from "./store/useAppStore";
 
 import SignInScreen from "./screens/signIn";
 import SignUpScreen from "./screens/signUp";
 import HomeScreen from "./screens/home";
+
+import useAppStore from "./store/useAppStore";
 
 const Stack = createNativeStackNavigator();
 
@@ -51,13 +52,13 @@ const theme = extendTheme({
 });
 
 export default function App() {
-  const isSignedIn = useAppStore((state) => state.isSignedIn);
+  const userIsSignedIn = useAppStore((state) => state.userIsSignedIn);
 
   return (
     <NativeBaseProvider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator>
-          {!isSignedIn ? (
+          {!userIsSignedIn ? (
             // No token found, user isn't signed in
             <>
               <Stack.Screen
