@@ -2,8 +2,8 @@ import React, { useState }  from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth"
 
-import { VStack, Text, Input, Button, Image, ZStack, Box, InputRightAddon, InputGroup } from "native-base";
-import { Alert } from "react-native";
+import { VStack, Text, Input, Button, Image, ZStack, Box, InputRightAddon, InputGroup, KeyboardAvoidingView } from "native-base";
+import { Alert, Platform } from "react-native";
 
 import { app } from "../../firebase/firebaseConfig";
 
@@ -38,6 +38,8 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
                 blurRadius={1.85}
             />
 
+    <KeyboardAvoidingView height="full" behavior={Platform.OS === "ios" ? "padding" : "height"}>
+
             <Box width="full" height="3/4" paddingX={6} alignItems="center" justifyContent="space-around" >
                 <Text fontSize="5xl" fontWeight="bold" color="light.50" style={{ "fontFamily": "AlfaSlabOne", "color": "#F2EDDB" }}>Sign Up</Text>
 
@@ -69,6 +71,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
                         </VStack>
                 </VStack>  
             </Box>
+    </KeyboardAvoidingView>
         </ZStack>
     )
 }
