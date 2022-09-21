@@ -34,16 +34,14 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
         <ZStack height="full" backgroundColor="maroon" >
             <Image source={require("../../assets/pool.jpg")}
                 alt="Alternate Text" size="full"
-                opacity={0.35}
+                opacity={0.25}
                 blurRadius={1.85}
             />
 
-    <KeyboardAvoidingView height="full" behavior={Platform.OS === "ios" ? "padding" : "height"}>
-
-            <Box width="full" height="3/4" paddingX={6} alignItems="center" justifyContent="space-around" >
+            <Box width="full" height="3/4" padding={4} alignItems="center" >
                 <Text fontSize="5xl" fontWeight="bold" color="light.50" style={{ "fontFamily": "AlfaSlabOne", "color": "#F2EDDB" }}>Sign Up</Text>
 
-                <VStack width="full" >
+            <KeyboardAvoidingView paddingX={6}  height="full" justifyContent="center"  behavior={Platform.OS === "ios" ? "padding" : "height"}>
                         <VStack marginY={2}>
                             <Text color="light.100" fontWeight="bold" marginY={1}>Name</Text>
                             <Input value={name} type="text" placeholder="John Doe" color="white" onChangeText={(name) => setName(name)} />
@@ -69,9 +67,8 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
                         <VStack marginY={2}>
                             <Button onPress={handleSignUp} colorScheme="success">Sign Up</Button>
                         </VStack>
-                </VStack>  
+            </KeyboardAvoidingView>
             </Box>
-    </KeyboardAvoidingView>
         </ZStack>
     )
 }
