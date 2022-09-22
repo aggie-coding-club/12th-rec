@@ -1,11 +1,12 @@
 import React, { useState }  from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
+import { doc, setDoc } from "firebase/firestore"; 
 
 import { VStack, Text, Input, Button, Image, ZStack, Box, InputRightAddon, InputGroup, KeyboardAvoidingView } from "native-base";
 import { Platform } from "react-native";
 
-import { app } from "../../firebase/firebaseConfig";
+import { app, db } from "../../firebase/firebaseConfig";
 
 interface Props {
     navigation: NativeStackNavigationProp<any, any>
@@ -21,7 +22,14 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
         if(!name || !email || !password || !classification) return 
 
         const auth = getAuth(app);
-        await createUserWithEmailAndPassword(auth, `${email}@tamu.edu`, password)
+        const user  = await createUserWithEmailAndPassword(auth, `${email}@tamu.edu`, password)
+            .then(async (userData) => {
+                await setDoc(doc(db, "users", userData.user.uid), {
+                    name,
+                    classification,
+                    email: userData.user.email
+                });
+            })
             .catch((Error) => alert(Error.code))
     }
 
