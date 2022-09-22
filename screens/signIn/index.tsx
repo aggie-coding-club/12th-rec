@@ -6,7 +6,6 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 import { VStack, Text, Center, Input, Button, Image, ZStack, Link } from "native-base";
 import { Alert } from "react-native";
 
-import useAppStore from "../../store/useAppStore";
 import { app } from "../../firebase/firebaseConfig";
 
 interface Props {
@@ -14,8 +13,6 @@ interface Props {
 }
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
-    const setIsSignedIn = useAppStore((state) => state.setUserIsSignedIn)
-
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
@@ -24,12 +21,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
         const auth = getAuth(app);
 
-        const user = await signInWithEmailAndPassword(auth, email, password)
+        await signInWithEmailAndPassword(auth, email, password)
             .catch((error) => Alert.alert("Incorrect username or password"))
-
-        if(user) {
-            user.user.emailVerified ? setIsSignedIn(true) : Alert.alert("Please verify your email")
-        }
     }
 
     const [fontsLoaded] = useFonts({

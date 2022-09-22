@@ -4,7 +4,6 @@ import { RouteProp } from '@react-navigation/native';
 import { UserCredential, getAuth } from "firebase/auth"
 import { View, Text } from "react-native";
 import { Button } from "native-base";
-import useAppStore from "../../store/useAppStore";
 
 interface Props {
     navigation: NativeStackNavigationProp<any, any>
@@ -12,14 +11,12 @@ interface Props {
 }
 
 const HomeScreen: React.FC<Props> = ({ route, navigation }) => {
-    const setIsSignedIn = useAppStore((state) => state.setUserIsSignedIn)
 
     const auth = getAuth();
     const user = auth.currentUser
 
     const handleLogOut = async () => {
         await auth.signOut();
-        setIsSignedIn(false);
     }
 
     return (

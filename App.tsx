@@ -2,6 +2,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeBaseProvider, extendTheme } from "native-base";
+import { getAuth } from "firebase/auth";
 
 import SignInScreen from "./screens/signIn";
 import SignUpScreen from "./screens/signUp";
@@ -53,6 +54,12 @@ const theme = extendTheme({
 
 export default function App() {
   const userIsSignedIn = useAppStore((state) => state.userIsSignedIn);
+  const setUserIsSignedIn = useAppStore((state) => state.setUserIsSignedIn);
+
+  const auth = getAuth();
+  auth.onAuthStateChanged((user) => {
+    user ? setUserIsSignedIn(true) : setUserIsSignedIn(false)
+  })
 
   return (
     <NativeBaseProvider theme={theme}>

@@ -1,9 +1,9 @@
 import React, { useState }  from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 
 import { VStack, Text, Input, Button, Image, ZStack, Box, InputRightAddon, InputGroup, KeyboardAvoidingView } from "native-base";
-import { Alert, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import { app } from "../../firebase/firebaseConfig";
 
@@ -22,12 +22,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
 
         const auth = getAuth(app);
         await createUserWithEmailAndPassword(auth, `${email}@tamu.edu`, password)
-                .then((user) => {
-                    sendEmailVerification(user.user)
-                    Alert.alert("Verify its you", "Please click the verification link we sent to your email")
-                    navigation.goBack()
-                })
-                .catch((Error) => alert(Error.code))
+            .catch((Error) => alert(Error.code))
     }
 
     return (
