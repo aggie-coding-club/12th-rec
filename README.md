@@ -4,7 +4,12 @@
 ## Run Locally  
 
 - Install Node.js & NPM (https://nodejs.org/en/)
-- Install Expo CLI
+
+Install Expo CLI
+  
+~~~bash  
+  sudo npm install -g expo
+~~~
 
 Clone the project  
 
