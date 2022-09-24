@@ -2,17 +2,20 @@ import React, { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import { doc, getDoc } from "firebase/firestore";
 
 import { VStack, Text, Center, Input, Button, Image, ZStack, Link } from "native-base";
 import { Alert } from "react-native";
 
-import { app } from "../../firebase/firebaseConfig";
+import { app, db } from "../../firebase/firebaseConfig";
+import useAppStore from "../../store/useAppStore";
+import { IUser } from "../../utils/interfaces";
 
 interface Props {
     navigation: NativeStackNavigationProp<any, any>
 }
 
-const LoginScreen: React.FC<Props> = ({ navigation }) => {
+const LoginScreen: React.FC<Props> = ({ navigation }) => {    
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 

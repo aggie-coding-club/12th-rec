@@ -3,12 +3,15 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeBaseProvider, extendTheme } from "native-base";
 import { getAuth } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 import SignInScreen from "./screens/signIn";
 import SignUpScreen from "./screens/signUp";
 import HomeScreen from "./screens/home";
 
 import useAppStore from "./store/useAppStore";
+import { db } from "./firebase/firebaseConfig";
+import { IUser } from "./utils/interfaces";
 
 const Stack = createNativeStackNavigator();
 
@@ -56,9 +59,19 @@ export default function App() {
   const userIsSignedIn = useAppStore((state) => state.userIsSignedIn);
   const setUserIsSignedIn = useAppStore((state) => state.setUserIsSignedIn);
 
+  const setCurrentUser = useAppStore((state) => state.setCurrentUser);
+
   const auth = getAuth();
-  auth.onAuthStateChanged((user) => {
-    user ? setUserIsSignedIn(true) : setUserIsSignedIn(false)
+  auth.onAuthStateChanged(async (user) => {
+    if(user) {
+      const docRef = doc(db, "users", user?.uid);
+      const userData = await getDoc(docRef).then((res) => res.data()) as IUser;
+      setCurrentUser({ name: userData.name, email: userData.email, classification: userData.classification })
+      setUserIsSignedIn(true)
+      return
+    }
+
+    setUserIsSignedIn(false)
   })
 
   return (
