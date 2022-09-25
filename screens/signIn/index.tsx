@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 
-import { VStack, Text, Center, Input, Button, Image, ZStack, Link } from "native-base";
+import { VStack, Text, Center, Input, Button, Image, ZStack, Link, Heading } from "native-base";
 import { Alert } from "react-native";
 import DismissKeyboardView from "../../components/dismissKeyboardView";
 
@@ -47,7 +47,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
                 <VStack height="full" justifyContent="space-evenly" >
                     <VStack>
-                        <Text fontSize="7xl" fontWeight="bold" color="light.50" style={{ "fontFamily": "AlfaSlabOne", "color": "#F2EDDB" }}>12th Rec</Text>
+                        <Heading fontSize="7xl" color="light.50" style={{ "fontFamily": "AlfaSlabOne", "color": "#F2EDDB" }}>12th Rec</Heading>
 
                         <VStack marginTop={12}>
                             <VStack marginY={2}>

@@ -42,7 +42,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
 
     return (
         <DismissKeyboardView>
-            <ZStack height="full" backgroundColor="maroon" >
+            <ZStack height="full" backgroundColor="maroon">
                 <Image source={require("../../assets/pool.jpg")}
                     alt="Alternate Text" size="full"
                     opacity={0.25}

@@ -1,6 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NativeBaseProvider, extendTheme } from "native-base";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
@@ -8,12 +9,14 @@ import { doc, getDoc } from "firebase/firestore";
 import SignInScreen from "./screens/signIn";
 import SignUpScreen from "./screens/signUp";
 import HomeScreen from "./screens/home";
+import SettingsScreen from "./screens/settings";
 
 import useAppStore from "./store/useAppStore";
 import { db } from "./firebase/firebaseConfig";
 import { IUser } from "./utils/interfaces";
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const theme = extendTheme({
   fontConfig: {
@@ -77,11 +80,10 @@ export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
       <NavigationContainer>
-        <Stack.Navigator>
-          {!userIsSignedIn ? (
+      {!userIsSignedIn ? (
             // No token found, user isn't signed in
-            <>
-              <Stack.Screen
+            <Stack.Navigator>
+          <Stack.Screen
                 name="SignInScreen"
                 component={SignInScreen}
                 options={{ headerShown: false, title: "Sign In" }}
@@ -95,16 +97,15 @@ export default function App() {
                   headerShown: false,
                 }}
               />
-            </>
+          </Stack.Navigator>
           ) : (
-            // User is signed in
-            <Stack.Screen
-              name="HomeScreen"
-              component={HomeScreen}
-              options={{ title: "Home" }}
-            />
+            <Tab.Navigator>
+              <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false  }} />
+              <Tab.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false  }} />
+          </Tab.Navigator>
+            
           )}
-        </Stack.Navigator>
+        
       </NavigationContainer>
     </NativeBaseProvider>
   );
