@@ -25,12 +25,12 @@ const SettingsScreen: React.FC<Props> = ({ route, navigation }) => {
     return (
         <VStack height="full" width="full" alignItems="center" justifyContent="space-around" safeArea >
             <VStack>
-                <Ionicons name="person-circle-outline" size={150} color="maroon" style={{ "textAlign": "center" }} />
-                <Heading fontSize="4xl" color="gray.800">{currentUser.name}</Heading>
+                <Ionicons name="person-circle-outline" size={150} style={{ "textAlign": "center" }} />
+                <Heading fontSize="4xl" color="maroon">{currentUser.name}</Heading>
             </VStack>
 
             <VStack justifyContent="space-around" width="75%" >
-                <Button width="100%" marginY={4} style={{ "backgroundColor": "maroon" }}>Personal Information</Button>
+                <Button width="100%" marginY={4} style={{ "backgroundColor": "maroon" }} onPress={() => navigation.navigate("PersonalInformation")}>Personal Information</Button>
                 <Button width="100%" marginY={4} style={{ "backgroundColor": "maroon" }}>How It Works</Button>
                 <Button width="100%"marginY={4} style={{ "backgroundColor": "maroon" }}>Help</Button>
             </VStack>

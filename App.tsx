@@ -10,6 +10,7 @@ import SignInScreen from "./screens/signIn";
 import SignUpScreen from "./screens/signUp";
 import HomeScreen from "./screens/home";
 import SettingsScreen from "./screens/settings";
+import PersonalInformationScreen from "./screens/home/personalInformation";
 
 import useAppStore from "./store/useAppStore";
 import { db } from "./firebase/firebaseConfig";
@@ -58,6 +59,45 @@ const theme = extendTheme({
   },
 });
 
+export function SettingsStackNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false  }} />
+      <Stack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ headerShown: false, presentation: "modal"  }}/>
+  </Stack.Navigator>
+  );
+}
+
+export function AuthStackNavigator() {
+  return (
+    <Stack.Navigator>
+          <Stack.Screen
+                name="SignInScreen"
+                component={SignInScreen}
+                options={{ headerShown: false, title: "Sign In" }}
+              />
+              <Stack.Screen
+                name="SignUpSceen"
+                component={SignUpScreen}
+                options={{
+                  presentation: "modal",
+                  title: "Sign Up",
+                  headerShown: false,
+                }}
+              />
+          </Stack.Navigator>
+  )
+}
+
+export function TabNavigator() {
+  return (
+    <Tab.Navigator>
+              <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false  }} />
+              <Tab.Screen name="Settings" component={SettingsStackNavigator} options={{ headerShown: false  }} />
+          </Tab.Navigator>
+  )
+}
+
 export default function App() {
   const userIsSignedIn = useAppStore((state) => state.userIsSignedIn);
   const setUserIsSignedIn = useAppStore((state) => state.setUserIsSignedIn);
@@ -82,30 +122,10 @@ export default function App() {
       <NavigationContainer>
       {!userIsSignedIn ? (
             // No token found, user isn't signed in
-            <Stack.Navigator>
-          <Stack.Screen
-                name="SignInScreen"
-                component={SignInScreen}
-                options={{ headerShown: false, title: "Sign In" }}
-              />
-              <Stack.Screen
-                name="SignUpSceen"
-                component={SignUpScreen}
-                options={{
-                  presentation: "modal",
-                  title: "Sign Up",
-                  headerShown: false,
-                }}
-              />
-          </Stack.Navigator>
+            <AuthStackNavigator />
           ) : (
-            <Tab.Navigator>
-              <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false  }} />
-              <Tab.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false  }} />
-          </Tab.Navigator>
-            
+            <TabNavigator />
           )}
-        
       </NavigationContainer>
     </NativeBaseProvider>
   );
