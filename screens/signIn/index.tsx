@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 
-import { VStack, Text, Center, Input, Button, Image, ZStack, Link, Heading } from "native-base";
+import { VStack, Text, Center, Input, Button, Image, ZStack, Link, Heading, InputRightAddon } from "native-base";
 import { Alert } from "react-native";
 import DismissKeyboardView from "../../components/dismissKeyboardView";
 
@@ -22,7 +22,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
         const auth = getAuth(app);
 
-        await signInWithEmailAndPassword(auth, email, password)
+        await signInWithEmailAndPassword(auth, `${email}@tamu.edu`, password)
             .catch((error) => Alert.alert("Incorrect username or password"))
     }
 
@@ -52,7 +52,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                         <VStack marginTop={12}>
                             <VStack marginY={2}>
                                 <Text color="light.100" fontWeight="bold" marginY={1}>Email</Text>
-                                <Input value={email} type="email" placeholder="johndoe@gmail.com" color="white" onChangeText={(email) => setEmail(email)} />
+                                <Input value={email} type="email" placeholder="john.doe" color="white" onChangeText={(email) => setEmail(email)} InputRightElement={<InputRightAddon children={"@tamu.edu"} />} />
                             </VStack>
 
                             <VStack marginY={2}>
