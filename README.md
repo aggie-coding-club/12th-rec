@@ -32,5 +32,5 @@ npm install
 Start the server  
 
 ~~~bash  
-expo start
+expo start --tunnel
 ~~~
