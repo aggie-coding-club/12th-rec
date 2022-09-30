@@ -34,7 +34,8 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
                 await setDoc(doc(db, "users", userData.user.uid), {
                     name,
                     classification,
-                    email: userData.user.email
+                    email: userData.user.email,
+                    uid: userData.user.uid 
                 });
             })
             .catch((Error) => alert(Error.code))

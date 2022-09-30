@@ -1,15 +1,41 @@
 import React, { useState } from "react";
+import { getAuth, updateEmail } from "firebase/auth";
+import { doc, updateDoc } from "firebase/firestore";
+import { FirebaseError } from "firebase/app";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import useAppStore from "../../store/useAppStore";
-
+import { db } from "../../firebase/firebaseConfig";
 import { Button, Heading, Input, InputGroup, InputRightAddon, Text, VStack } from "native-base";
+import { Alert } from "react-native";
 
-const PersonalInformation: React.FC = () => {
+interface Props {
+    navigation: NativeStackNavigationProp<any, any>
+}
+
+const PersonalInformation: React.FC<Props> = ({ navigation }) => {
+    const auth = getAuth();
+    
     const userInfo = useAppStore((state) => state.currentUser);
+    const setCurrentUser = useAppStore((state) => state.setCurrentUser);
 
     const [name, setName] = useState(userInfo.name);
     const [email, setEmail] = useState(userInfo.email.replace("@tamu.edu", ""));
     const [classification, setClassification] = useState(userInfo.classification);
+
+    const updatePersonalInfo = async () => {
+        if (name === userInfo.name && `${email}@tamu.edu` === userInfo.email && classification === userInfo.classification) { return }
+
+
+        await Promise.all([updateEmail(auth.currentUser!, `${email}@tamu.edu`), updateDoc(doc(db, "users", userInfo.uid), {
+            name,
+            classification,
+            email: `${email}@tamu.edu`,
+        })]).then(async (res) => {
+            setCurrentUser({ name, email: `${userInfo.email}`, classification, uid: userInfo.uid })
+            Alert.alert("Profile updated successfully")
+        })
+    }
 
     return (
         <VStack padding={6} height="1/2" justifyContent="space-between" >
@@ -37,7 +63,7 @@ const PersonalInformation: React.FC = () => {
                 </VStack>
             </VStack>
 
-            <Button width="75%" colorScheme="light" alignSelf="center" backgroundColor="maroon" >Update</Button>
+            <Button width="75%" colorScheme="light" alignSelf="center" backgroundColor="maroon" onPress={updatePersonalInfo} >Update</Button>
         </VStack>
     )
 };

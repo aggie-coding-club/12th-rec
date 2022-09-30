@@ -13,8 +13,8 @@ const useAppStore = create<AppState>()((set) => ({
   userIsSignedIn: false,
   setUserIsSignedIn: (userIsSignedIn) => set((state) => ({ userIsSignedIn: userIsSignedIn })),
 
-  currentUser: { name: "", email: "", classification: "" },
-  setCurrentUser: (newUser) => set((state) => ({ currentUser: newUser }))
+  currentUser: { name: "", email: "", classification: "", uid: "" },
+  setCurrentUser: (newUser) => set((state) => ({ currentUser: newUser })),
 }))
 
 export default useAppStore;
