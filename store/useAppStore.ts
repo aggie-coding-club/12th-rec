@@ -1,4 +1,5 @@
 import create from 'zustand'
+import { UserCredential } from 'firebase/auth';
 import { IUser } from "../utils/interfaces";
 
 interface AppState {

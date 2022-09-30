@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NativeBaseProvider, extendTheme } from "native-base";
+import { SSRProvider } from "react-aria";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
@@ -62,8 +63,8 @@ const theme = extendTheme({
 export function SettingsStackNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false  }} />
-      <Stack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ headerShown: false, presentation: "modal"  }}/>
+      <Stack.Screen name="SettingsScreen" component={SettingsScreen} options={{ headerShown: false  }} />
+      <Stack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ headerShown: false }}/>
   </Stack.Navigator>
   );
 }
@@ -118,6 +119,7 @@ export default function App() {
   })
 
   return (
+    <SSRProvider>
     <NativeBaseProvider theme={theme}>
       <NavigationContainer>
       {!userIsSignedIn ? (
@@ -128,5 +130,6 @@ export default function App() {
           )}
       </NavigationContainer>
     </NativeBaseProvider>
+    </SSRProvider>
   );
 }
