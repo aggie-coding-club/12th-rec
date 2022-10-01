@@ -95,7 +95,7 @@ export function TabNavigator() {
     <Tab.Navigator>
               <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false  }} />
               <Tab.Screen name="Settings" component={SettingsStackNavigator} options={{ headerShown: false  }} />
-          </Tab.Navigator>
+      </Tab.Navigator>
   )
 }
 

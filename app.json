@@ -27,6 +27,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow 12thRec to access your photos",
+          "cameraPermission": "Allow 12thRec to access your camera"
+        }
+      ]
+    ]
   }
 }
