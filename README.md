@@ -14,7 +14,7 @@ Install Expo CLI
 Clone the project  
 
 ~~~bash  
-  git clone https://github.com/SumitNalavade/12thRec.git
+  git clone https://github.com/aggie-coding-club/12th-rec.git
 ~~~
 
 Go to the project directory  
