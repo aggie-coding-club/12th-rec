@@ -11,7 +11,7 @@ import SignInScreen from "./screens/signIn";
 import SignUpScreen from "./screens/signUp";
 import HomeScreen from "./screens/home";
 import SettingsScreen from "./screens/settings";
-import PersonalInformationScreen from "./screens/home/personalInformation";
+import PersonalInformationScreen from "./screens/settings/personalInformation";
 
 import useAppStore from "./store/useAppStore";
 import { db } from "./firebase/firebaseConfig";

@@ -29,7 +29,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
         if(!name || !email || !password || !classification || isInvalid) return 
 
         const auth = getAuth(app);
-        const user  = await createUserWithEmailAndPassword(auth, `${email}@tamu.edu`, password)
+        await createUserWithEmailAndPassword(auth, `${email}@tamu.edu`, password)
             .then(async (userData) => {
                 await setDoc(doc(db, "users", userData.user.uid), {
                     name,
