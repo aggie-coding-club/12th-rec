@@ -8,7 +8,7 @@
 Install Expo CLI
   
 ~~~bash  
-  sudo npm install -g expo
+  sudo npm install -g expo-cli
 ~~~
 
 Clone the project  
