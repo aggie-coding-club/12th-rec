@@ -3,4 +3,5 @@ export interface IUser {
     classification: string
     email: string
     uid: string
+    profilePicURL: string | null
 }

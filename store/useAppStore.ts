@@ -14,7 +14,7 @@ const useAppStore = create<AppState>()((set) => ({
   userIsSignedIn: false,
   setUserIsSignedIn: (userIsSignedIn) => set((state) => ({ userIsSignedIn: userIsSignedIn })),
 
-  currentUser: { name: "", email: "", classification: "", uid: "" },
+  currentUser: { name: "", email: "", classification: "", uid: "", profilePicURL: null },
   setCurrentUser: (newUser) => set((state) => ({ currentUser: newUser })),
 }))
 

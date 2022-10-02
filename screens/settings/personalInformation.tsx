@@ -36,7 +36,7 @@ const PersonalInformation: React.FC<Props> = ({ navigation }) => {
             classification,
             email: `${email}@tamu.edu`,
         })]).then(async (res) => {
-            setCurrentUser({ name, email: `${email}@tamu.edu`, classification, uid: userInfo.uid })
+            setCurrentUser({ name, email: `${email}@tamu.edu`, classification, uid: userInfo.uid, profilePicURL: userInfo.profilePicURL })
             Alert.alert("Profile updated successfully")
         })
     }

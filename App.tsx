@@ -108,8 +108,8 @@ export default function App() {
   const auth = getAuth();
   auth.onAuthStateChanged(async (user) => {
     if(user) {
-      const docRef = doc(db, "users", user.uid);
-      const userData = await getDoc(docRef).then((res) => res.data()) as IUser;
+      const userRef = doc(db, "users", user.uid);
+      const userData = await getDoc(userRef).then((res) => res.data()) as IUser;
       setCurrentUser({...userData})
       setUserIsSignedIn(true)
       return
