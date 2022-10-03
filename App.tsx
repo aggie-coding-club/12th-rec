@@ -12,6 +12,7 @@ import SignUpScreen from "./screens/signUp";
 import HomeScreen from "./screens/home";
 import SettingsScreen from "./screens/settings";
 import PersonalInformationScreen from "./screens/settings/personalInformation";
+import AddProfilePic from "./screens/signUp/addProfilePic";
 
 import useAppStore from "./store/useAppStore";
 import { db } from "./firebase/firebaseConfig";
@@ -83,6 +84,15 @@ export function AuthStackNavigator() {
                 options={{
                   presentation: "modal",
                   title: "Sign Up",
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="AddProfilePicScreen"
+                component={AddProfilePic}
+                options={{
+                  presentation: "modal",
+                  title: "Add Profile Pic",
                   headerShown: false,
                 }}
               />

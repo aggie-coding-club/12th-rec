@@ -1,19 +1,30 @@
 import React, { useState, useEffect }  from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
+import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
+import * as ImagePicker from 'expo-image-picker';
 import { doc, setDoc } from "firebase/firestore"; 
 
 import { VStack, Text, Input, Button, Image, ZStack, Box, InputRightAddon, InputGroup, KeyboardAvoidingView, FormControl, WarningOutlineIcon } from "native-base";
 import { Platform } from "react-native";
 import DismissKeyboardView from "../../components/dismissKeyboardView";
 
-import { app, db } from "../../firebase/firebaseConfig";
+import { db } from "../../firebase/firebaseConfig";
+import useAppStore from "../../store/useAppStore";
+import useImagePicker from "../../utils/useImagePicker";
 
 interface Props {
     navigation: NativeStackNavigationProp<any, any>
 }
 
 const SignUpScreen: React.FC<Props> = ({ navigation }) => {
+    const storage = getStorage();
+    const auth = getAuth();
+
+    const currentUser = useAppStore((state) => state.currentUser)
+    const setCurrentUser = useAppStore((state) => state.setCurrentUser);
+    const getImage = useImagePicker();
+
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -26,19 +37,31 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
     }, [password, confirmPassword])
 
     const handleSignUp = async() => {
-        if(!name || !email || !password || !classification || isInvalid) return 
+        const newFile = await getImage();
 
-        const auth = getAuth(app);
-        await createUserWithEmailAndPassword(auth, `${email}@tamu.edu`, password)
-            .then(async (userData) => {
-                await setDoc(doc(db, "users", userData.user.uid), {
-                    name,
-                    classification,
-                    email: userData.user.email,
-                    uid: userData.user.uid 
-                });
+        if(!newFile) return
+
+        createUserWithEmailAndPassword(auth, `${email}@tamu.edu`, password).then(async (userCredentials) => {
+            const storageRef = ref(storage, userCredentials.user.uid);
+
+            await uploadBytesResumable(storageRef, newFile)
+
+            await setDoc(doc(db, "users", userCredentials.user.uid), {
+                name,
+                classification,
+                email: userCredentials.user.email,
+                uid: userCredentials.user.uid,
+                profilePicURL: `https://firebasestorage.googleapis.com/v0/b/threc-e1518.appspot.com/o/${userCredentials.user.uid}?alt=media&token=`
             })
-            .catch((Error) => alert(Error.code))
+            
+            setCurrentUser({ name, classification, email: userCredentials.user.email!, uid: userCredentials.user.uid, profilePicURL: `https://firebasestorage.googleapis.com/v0/b/threc-e1518.appspot.com/o/${userCredentials.user.uid}?alt=media&token=` })
+        })
+    }
+
+    const navigateToAddProfilePic = () => {
+        if(!name || !email || !password || !classification || isInvalid) return 
+    
+        navigation.navigate("AddProfilePicScreen", { uploadImage: handleSignUp })
     }
 
     return (
@@ -86,7 +109,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
                             </VStack>
 
                             <VStack marginY={2}>
-                                <Button onPress={handleSignUp} colorScheme="success">Sign Up</Button>
+                                <Button onPress={navigateToAddProfilePic} colorScheme="success">Sign Up</Button>
                             </VStack>
                     </FormControl>
                 </KeyboardAvoidingView>
