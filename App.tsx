@@ -65,38 +65,29 @@ const theme = extendTheme({
 
 export function SettingsStackNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="SettingsScreen" component={SettingsScreen} options={{ headerShown: false  }} />
-      <Stack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ headerShown: false }}/>
+    <Stack.Navigator  screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+      <Stack.Screen name="PersonalInformation" component={PersonalInformationScreen} />
   </Stack.Navigator>
   );
 }
 
 export function AuthStackNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen
                 name="SignInScreen"
                 component={SignInScreen}
-                options={{ headerShown: false, title: "Sign In" }}
               />
               <Stack.Screen
                 name="SignUpSceen"
                 component={SignUpScreen}
-                options={{
-                  presentation: "modal",
-                  title: "Sign Up",
-                  headerShown: false,
-                }}
+                options={{ presentation: "modal" }}
               />
               <Stack.Screen
                 name="AddProfilePicScreen"
                 component={AddProfilePicScreen}
-                options={{
-                  presentation: "modal",
-                  title: "Add Profile Pic",
-                  headerShown: false,
-                }}
+                options={{ presentation: "modal" }}
               />
           </Stack.Navigator>
   )
@@ -121,13 +112,14 @@ export function TabNavigator() {
         // You can return any component that you like here!
         return <Ionicons name={iconName} size={size} color={color} />;
       },
+      headerShown: false,
       tabBarActiveTintColor: 'maroon',
       tabBarInactiveTintColor: 'gray',
       tabBarShowLabel: false
     })}>
-              <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-              <Tab.Screen name="CreatePosts" component={CreatePostsScreen} options={{ presentation: "modal" }} ></Tab.Screen>
-              <Tab.Screen name="Settings" component={SettingsStackNavigator} options={{ headerShown: false  }} />
+              <Tab.Screen name="Home" component={HomeScreen} />
+              <Tab.Screen name="CreatePosts" component={CreatePostsScreen} />
+              <Tab.Screen name="Settings" component={SettingsStackNavigator}/>
       </Tab.Navigator>
   )
 }
