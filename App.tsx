@@ -13,7 +13,8 @@ import SignUpScreen from "./screens/signUp";
 import HomeScreen from "./screens/home";
 import SettingsScreen from "./screens/settings";
 import PersonalInformationScreen from "./screens/settings/personalInformation";
-import AddProfilePic from "./screens/signUp/addProfilePic";
+import AddProfilePicScreen from "./screens/signUp/addProfilePic";
+import CreatePostsScreen from "./screens/createPosts";
 
 import useAppStore from "./store/useAppStore";
 import { db } from "./firebase/firebaseConfig";
@@ -90,7 +91,7 @@ export function AuthStackNavigator() {
               />
               <Stack.Screen
                 name="AddProfilePicScreen"
-                component={AddProfilePic}
+                component={AddProfilePicScreen}
                 options={{
                   presentation: "modal",
                   title: "Add Profile Pic",
@@ -113,6 +114,8 @@ export function TabNavigator() {
             : 'home-outline';
         } else if (route.name === 'Settings') {
           iconName = focused ? 'person' : 'person-outline';
+        } else if (route.name === 'CreatePosts') {
+          iconName = focused ? 'add-circle' : 'add-circle-outline';
         }
 
         // You can return any component that you like here!
@@ -120,8 +123,10 @@ export function TabNavigator() {
       },
       tabBarActiveTintColor: 'maroon',
       tabBarInactiveTintColor: 'gray',
+      tabBarShowLabel: false
     })}>
-              <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false  }} />
+              <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+              <Tab.Screen name="CreatePosts" component={CreatePostsScreen} options={{ presentation: "modal" }} ></Tab.Screen>
               <Tab.Screen name="Settings" component={SettingsStackNavigator} options={{ headerShown: false  }} />
       </Tab.Navigator>
   )
