@@ -34,3 +34,6 @@ Start the server
 ~~~bash  
 expo start --tunnel
 ~~~
+
+#link
+https://www.canva.com/design/DAFMboNoMGA/BxJRpUEIcnoIBlvcYF0Vjw/edit?utm_content=DAFMboNoMGA&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
