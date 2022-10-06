@@ -82,7 +82,6 @@ export function AuthStackNavigator() {
               <Stack.Screen
                 name="SignUpSceen"
                 component={SignUpScreen}
-                options={{ presentation: "modal" }}
               />
               <Stack.Screen
                 name="AddProfilePicScreen"

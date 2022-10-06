@@ -2,10 +2,9 @@ import React, { useState, useEffect }  from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
-import * as ImagePicker from 'expo-image-picker';
 import { doc, setDoc } from "firebase/firestore"; 
 
-import { VStack, Text, Input, Button, Image, ZStack, Box, InputRightAddon, InputGroup, KeyboardAvoidingView, FormControl, WarningOutlineIcon } from "native-base";
+import { VStack, Text, Input, Button, Image, ZStack, Box, InputRightAddon, InputGroup, KeyboardAvoidingView, FormControl, WarningOutlineIcon, Select, CheckIcon } from "native-base";
 import { Platform } from "react-native";
 import DismissKeyboardView from "../../components/dismissKeyboardView";
 
@@ -73,7 +72,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
                     blurRadius={1.85}
                 />
 
-                <Box width="full" height="3/4" padding={4} alignItems="center" >
+                <Box width="full" height="3/4" padding={4} alignItems="center" paddingTop={12} >
                     <Text fontSize="5xl" fontWeight="bold" color="light.50" style={{ "fontFamily": "AlfaSlabOne", "color": "#F2EDDB" }}>Sign Up</Text>
 
                 <KeyboardAvoidingView paddingX={6}  height="full" justifyContent="center"  behavior={Platform.OS === "ios" ? "padding" : "height"}>
@@ -85,7 +84,12 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
                             
                             <VStack marginY={2}>
                                 <Text color="light.100" fontWeight="bold" marginY={1}>Classification</Text>
-                                <Input value={classification} type="text" placeholder="Sophomore" color="white" onChangeText={(classification) => setClassification(classification)} />
+                                <Select selectedValue={classification} placeholder="freshman" mt={1} color="white" onValueChange={classification => setClassification(classification)}>
+                                    <Select.Item label="freshman" value="freshman" />
+                                    <Select.Item label="sophomore" value="sophomore" />
+                                    <Select.Item label="junior" value="junior" />
+                                    <Select.Item label="senior" value="senior" />
+                                </Select>
                             </VStack>
 
                             <VStack marginY={2} >
@@ -107,7 +111,6 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
                                     Passwords must be the same.
                                 </FormControl.ErrorMessage>
                             </VStack>
-
                             <VStack marginY={2}>
                                 <Button onPress={navigateToAddProfilePic} colorScheme="success">Sign Up</Button>
                             </VStack>

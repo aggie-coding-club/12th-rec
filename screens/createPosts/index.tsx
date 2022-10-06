@@ -26,7 +26,7 @@ const CreatePosts: React.FC = () => {
                     </VStack>
 
                     <VStack marginY={2}>
-                        <Text color="black" fontWeight="bold" marginY={1}>Time</Text>
+                        <Text color="black" fontWeight="bold" marginY={1}>Date/Time</Text>
                         <HStack justifyContent="space-between">
                         <DateTimePicker
                                 display="compact"
