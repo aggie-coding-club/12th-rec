@@ -4,7 +4,6 @@ import { RouteProp } from '@react-navigation/native';
 import { UserCredential, getAuth } from "firebase/auth"
 import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { doc, updateDoc } from "firebase/firestore";
-import * as ImagePicker from 'expo-image-picker';
 
 import { db } from "../../firebase/firebaseConfig";
 import useImagePicker from "../../utils/useImagePicker";
