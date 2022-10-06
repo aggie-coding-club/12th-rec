@@ -1,6 +1,7 @@
 import React from "react";
 
-import { Box, Button, Heading, Input, TextArea, Text, VStack } from "native-base";
+import { Box, Button, Heading, Input, TextArea, Text, VStack, HStack } from "native-base";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import DismissKeyboardView from "../../components/dismissKeyboardView";
 
@@ -15,8 +16,27 @@ const CreatePosts: React.FC = () => {
 
                 <VStack marginY={4}>
                     <VStack marginY={2}>
+                        <Text color="black" fontWeight="bold" marginY={1}>Title</Text>
+                        <Input type="text" placeholder="Southside Rec" color="black" />
+                    </VStack>
+
+                    <VStack marginY={2}>
                         <Text color="black" fontWeight="bold" marginY={1}>Location</Text>
                         <Input type="text" placeholder="Southside Rec" color="black" />
+                    </VStack>
+
+                    <VStack marginY={2}>
+                        <Text color="black" fontWeight="bold" marginY={1}>Time</Text>
+                        <HStack justifyContent="space-between">
+                        <DateTimePicker
+                                display="compact"
+                                mode="datetime"
+                                style={{ width: "48%" }}
+                                value={new Date()}
+                        />
+                            <Box> </Box>
+                        </HStack>
+ 
                     </VStack>
 
                     <VStack marginY={2}>

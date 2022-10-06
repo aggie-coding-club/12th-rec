@@ -43,8 +43,8 @@ const PersonalInformation: React.FC<Props> = ({ navigation }) => {
 
     return (
         <DismissKeyboardView>
-            <Box height="full" >
-                <VStack padding={6} height="1/2" justifyContent="space-between" safeArea >
+            <Box height="full"  >
+                <Box padding={6} height="1/2" justifyContent="space-between" safeArea >
                     <VStack>
                         <Heading size="xl" color="maroon">Edit Personal Info</Heading>
                         <Text>We do not share your personal information with anyone.</Text>
@@ -67,10 +67,12 @@ const PersonalInformation: React.FC<Props> = ({ navigation }) => {
                             <Text color="black" fontWeight="bold" marginY={1}>Classification</Text>
                             <Input value={classification} type="text" placeholder="sophomore" color="black" onChangeText={(classification) => setClassification(classification)} />
                         </VStack>
-                    </VStack>
 
-                    <Button width="75%" colorScheme="light" alignSelf="center" backgroundColor="maroon" onPress={() => name === userInfo.name && `${email}@tamu.edu` === userInfo.email && classification === userInfo.classification ? "" : setShowModal(true)} >Update</Button>
-                </VStack>
+                        <VStack marginY={2}>
+                            <Button width="full" colorScheme="light" alignSelf="center" backgroundColor="maroon" onPress={() => name === userInfo.name && `${email}@tamu.edu` === userInfo.email && classification === userInfo.classification ? "" : setShowModal(true)} >Update</Button>                
+                        </VStack>
+                    </VStack>
+                </Box>
 
                 <Modal isOpen={showModal} onClose={() => setShowModal(false)} avoidKeyboard >
                     <Modal.Content maxWidth="400px">
