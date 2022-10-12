@@ -1,10 +1,24 @@
-import React, { useState, useEffect }  from "react";
+import React, { useState, useEffect } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
-import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore"; 
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
-import { VStack, Text, Input, Button, Image, ZStack, Box, InputRightAddon, InputGroup, KeyboardAvoidingView, FormControl, WarningOutlineIcon, Select, CheckIcon } from "native-base";
+import {
+  VStack,
+  Text,
+  Input,
+  Button,
+  Image,
+  ZStack,
+  Box,
+  InputRightAddon,
+  InputGroup,
+  KeyboardAvoidingView,
+  FormControl,
+  WarningOutlineIcon,
+  Select,
+  CheckIcon,
+} from "native-base";
 import { Platform } from "react-native";
 import DismissKeyboardView from "../../components/dismissKeyboardView";
 
@@ -13,113 +27,211 @@ import useAppStore from "../../store/useAppStore";
 import useImagePicker from "../../utils/useImagePicker";
 
 interface Props {
-    navigation: NativeStackNavigationProp<any, any>
+  navigation: NativeStackNavigationProp<any, any>;
 }
 
 const SignUpScreen: React.FC<Props> = ({ navigation }) => {
-    const storage = getStorage();
-    const auth = getAuth();
+  const auth = getAuth();
 
-    const currentUser = useAppStore((state) => state.currentUser)
-    const setCurrentUser = useAppStore((state) => state.setCurrentUser);
-    const getImage = useImagePicker();
+  const currentUser = useAppStore((state) => state.currentUser);
+  const setCurrentUser = useAppStore((state) => state.setCurrentUser);
+  const getImage = useImagePicker();
 
-    const [name, setName] = useState("")
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [classification, setClassification] = useState("")
-    const [isInvalid, setIsInvalid] = useState(true)
-    const [confirmPassword, setConfirmPassword] = useState("")
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [classification, setClassification] = useState("");
+  const [isInvalid, setIsInvalid] = useState(true);
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-    useEffect(() => {
-        confirmPassword === password ? setIsInvalid(false) : setIsInvalid(true)
-    }, [password, confirmPassword])
+  useEffect(() => {
+    confirmPassword === password ? setIsInvalid(false) : setIsInvalid(true);
+  }, [password, confirmPassword]);
 
-    const handleSignUp = async() => {
-        const newFile = await getImage();
+  const handleSignUp = async () => {
+    const image = await getImage();
 
-        if(!newFile) return
+    if (!image) return;
 
-        createUserWithEmailAndPassword(auth, `${email}@tamu.edu`, password).then(async (userCredentials) => {
-            const storageRef = ref(storage, userCredentials.user.uid);
+    createUserWithEmailAndPassword(auth, `${email}@tamu.edu`, password).then(
+      async (userCredentials) => {
+        let base64Img = `data:image/jpg;base64,${image.base64}`;
 
-            await uploadBytesResumable(storageRef, newFile)
+        let apiUrl = "https://api.cloudinary.com/v1_1/dtzsq6zws/image/upload";
 
-            await setDoc(doc(db, "users", userCredentials.user.uid), {
-                name,
-                classification,
-                email: userCredentials.user.email,
-                uid: userCredentials.user.uid,
-                profilePicURL: `https://firebasestorage.googleapis.com/v0/b/threc-e1518.appspot.com/o/${userCredentials.user.uid}?alt=media&token=`
-            })
-            
-            setCurrentUser({ name, classification, email: userCredentials.user.email!, uid: userCredentials.user.uid, profilePicURL: `https://firebasestorage.googleapis.com/v0/b/threc-e1518.appspot.com/o/${userCredentials.user.uid}?alt=media&token=` })
+        let data = {
+          file: base64Img,
+          upload_preset: "ojk7nay4",
+          public_id: userCredentials.user.uid,
+        };
+
+        fetch(apiUrl, {
+          body: JSON.stringify(data),
+          headers: {
+            "content-type": "application/json",
+          },
+          method: "POST",
         })
-    }
+          .then(async (r) => {
+            let data = await r.json();
+            console.log(data.secure_url)
+            await setDoc(doc(db, "users", userCredentials.user.uid), {
+              name,
+              classification,
+              email: userCredentials.user.email,
+              uid: userCredentials.user.uid,
+              profilePicURL: data.secure_url,
+            }).then((res) => {
+                setCurrentUser({
+                    name,
+                    classification,
+                    email: userCredentials.user.email!,
+                    uid: userCredentials.user.uid,
+                    profilePicURL: data.secure_url,
+                  });
+            })
+          })
+          .catch((err) => console.log(err));
+      }
+    );
+  };
 
-    const navigateToAddProfilePic = () => {
-        if(!name || !email || !password || !classification || isInvalid) return 
-    
-        navigation.navigate("AddProfilePicScreen", { uploadImage: handleSignUp })
-    }
+  const navigateToAddProfilePic = () => {
+    if (!name || !email || !password || !classification || isInvalid) return;
 
-    return (
-        <DismissKeyboardView>
-            <ZStack height="full" backgroundColor="maroon">
-                <Image source={require("../../assets/pool.jpg")}
-                    alt="Alternate Text" size="full"
-                    opacity={0.25}
-                    blurRadius={1.85}
+    navigation.navigate("AddProfilePicScreen", { uploadImage: handleSignUp });
+  };
+
+  return (
+    <DismissKeyboardView>
+      <ZStack height="full" backgroundColor="maroon">
+        <Image
+          source={require("../../assets/pool.jpg")}
+          alt="Alternate Text"
+          size="full"
+          opacity={0.25}
+          blurRadius={1.85}
+        />
+
+        <Box
+          width="full"
+          height="3/4"
+          padding={4}
+          alignItems="center"
+          paddingTop={12}
+        >
+          <Text
+            fontSize="5xl"
+            fontWeight="bold"
+            color="light.50"
+            style={{ fontFamily: "AlfaSlabOne", color: "#F2EDDB" }}
+          >
+            Sign Up
+          </Text>
+
+          <KeyboardAvoidingView
+            paddingX={6}
+            height="full"
+            justifyContent="center"
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
+            <FormControl isRequired>
+              <VStack marginY={2}>
+                <Text color="light.100" fontWeight="bold" marginY={1}>
+                  Name
+                </Text>
+                <Input
+                  value={name}
+                  type="text"
+                  placeholder="John Doe"
+                  color="white"
+                  onChangeText={(name) => setName(name)}
                 />
+              </VStack>
 
-                <Box width="full" height="3/4" padding={4} alignItems="center" paddingTop={12} >
-                    <Text fontSize="5xl" fontWeight="bold" color="light.50" style={{ "fontFamily": "AlfaSlabOne", "color": "#F2EDDB" }}>Sign Up</Text>
+              <VStack marginY={2}>
+                <Text color="light.100" fontWeight="bold" marginY={1}>
+                  Classification
+                </Text>
+                <Select
+                  selectedValue={classification}
+                  placeholder="classification"
+                  mt={1}
+                  onValueChange={(classification) =>
+                    setClassification(classification)
+                  }
+                  color="white"
+                >
+                  <Select.Item label="freshman" value="freshman" />
+                  <Select.Item label="sophomore" value="sophomore" />
+                  <Select.Item label="junior" value="junior" />
+                  <Select.Item label="senior" value="senior" />
+                </Select>
+              </VStack>
 
-                <KeyboardAvoidingView paddingX={6}  height="full" justifyContent="center"  behavior={Platform.OS === "ios" ? "padding" : "height"}>
-                    <FormControl isRequired>
-                            <VStack marginY={2}>
-                                <Text color="light.100" fontWeight="bold" marginY={1}>Name</Text>
-                                <Input value={name} type="text" placeholder="John Doe" color="white" onChangeText={(name) => setName(name)} />
-                            </VStack>
-                            
-                            <VStack marginY={2}>
-                                <Text color="light.100" fontWeight="bold" marginY={1}>Classification</Text>
-                                <Select selectedValue={classification} placeholder="classification" mt={1} onValueChange={classification => setClassification(classification)}>
-                                    <Select.Item label="freshman" value="freshman" />
-                                    <Select.Item label="sophomore" value="sophomore" />
-                                    <Select.Item label="junior" value="junior" />
-                                    <Select.Item label="senior" value="senior" />
-                                </Select>
-                            </VStack>
+              <VStack marginY={2}>
+                <Text color="light.100" fontWeight="bold" marginY={1}>
+                  Email
+                </Text>
+                <InputGroup>
+                  <Input
+                    width="full"
+                    value={email}
+                    type="email"
+                    placeholder="john.doe"
+                    color="white"
+                    onChangeText={(email) => setEmail(email)}
+                    InputRightElement={
+                      <InputRightAddon children={"@tamu.edu"} />
+                    }
+                  />
+                </InputGroup>
+              </VStack>
 
-                            <VStack marginY={2} >
-                                <Text color="light.100" fontWeight="bold" marginY={1}>Email</Text>
-                                <InputGroup>
-                                    <Input width="full" value={email} type="email" placeholder="john.doe" color="white" onChangeText={(email) => setEmail(email)} InputRightElement={<InputRightAddon children={"@tamu.edu"} />} />
-                                </InputGroup>
-                            </VStack>
+              <VStack marginY={2}>
+                <Text color="light.100" fontWeight="bold" marginY={1}>
+                  Password
+                </Text>
+                <Input
+                  value={password}
+                  type="password"
+                  placeholder="password"
+                  color="white"
+                  onChangeText={(password) => setPassword(password)}
+                />
+              </VStack>
 
-                            <VStack marginY={2}>
-                                <Text color="light.100" fontWeight="bold" marginY={1}>Password</Text>
-                                <Input value={password} type="password" placeholder="password" color="white" onChangeText={(password) => setPassword(password)}/>
-                            </VStack>
-
-                            <VStack marginY={2}>
-                                <Text color="light.100" fontWeight="bold" marginY={1}>Confirm Password</Text>
-                                <Input value={confirmPassword} type="password" placeholder="password" color="white" onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}/>
-                                <FormControl.ErrorMessage isInvalid={isInvalid} leftIcon={<WarningOutlineIcon size="xs" />}>
-                                    Passwords must be the same.
-                                </FormControl.ErrorMessage>
-                            </VStack>
-                            <VStack marginY={2}>
-                                <Button onPress={navigateToAddProfilePic} colorScheme="success">Sign Up</Button>
-                            </VStack>
-                    </FormControl>
-                </KeyboardAvoidingView>
-                </Box>
-            </ZStack>
-        </DismissKeyboardView>
-    )
-}
+              <VStack marginY={2}>
+                <Text color="light.100" fontWeight="bold" marginY={1}>
+                  Confirm Password
+                </Text>
+                <Input
+                  value={confirmPassword}
+                  type="password"
+                  placeholder="password"
+                  color="white"
+                  onChangeText={(confirmPassword) =>
+                    setConfirmPassword(confirmPassword)
+                  }
+                />
+                <FormControl.ErrorMessage
+                  isInvalid={isInvalid}
+                  leftIcon={<WarningOutlineIcon size="xs" />}
+                >
+                  Passwords must be the same.
+                </FormControl.ErrorMessage>
+              </VStack>
+              <VStack marginY={2}>
+                <Button onPress={navigateToAddProfilePic} colorScheme="success">
+                  Sign Up
+                </Button>
+              </VStack>
+            </FormControl>
+          </KeyboardAvoidingView>
+        </Box>
+      </ZStack>
+    </DismissKeyboardView>
+  );
+};
 
 export default SignUpScreen;

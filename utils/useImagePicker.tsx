@@ -1,4 +1,3 @@
-import React from "react";
 import * as ImagePicker from 'expo-image-picker';
 
 export default function useImagePicker() {
@@ -8,17 +7,12 @@ export default function useImagePicker() {
             allowsEditing: true,
             aspect: [1, 1],
             quality: 0.5,
+            base64: true
         })
 
         if(image["cancelled"]) return
 
-        const response = await fetch(image["uri"]);
-        const blob = await response.blob();
-        const newFile = new File([blob], `profilePic.png`, {
-            type: "image/png",
-        })
-
-        return newFile
+        return image
     }
 
     return () => getImage()

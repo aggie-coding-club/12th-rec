@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RouteProp } from '@react-navigation/native';
 import { UserCredential, getAuth } from "firebase/auth"
-import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { doc, updateDoc } from "firebase/firestore";
 
 import { db } from "../../firebase/firebaseConfig";
@@ -18,11 +17,12 @@ interface Props {
 
 const SettingsScreen: React.FC<Props> = ({ route, navigation }) => {
     const auth = getAuth();
-    const storage = getStorage();
 
     const currentUser = useAppStore((state) => state.currentUser)
     const setCurrentUser = useAppStore((state) => state.setCurrentUser)
     const getImage = useImagePicker()
+
+    console.log(currentUser.profilePicURL)
 
     const [profilePicURL, setProfilePicURL] = useState<unknown>(currentUser.profilePicURL);
 
@@ -30,28 +30,10 @@ const SettingsScreen: React.FC<Props> = ({ route, navigation }) => {
         await auth.signOut();
     }
 
-    const uploadImage = async () => {
-        const newFile = await getImage()
-
-        if(!newFile) return
-
-        setProfilePicURL(null);
-        const storageRef = ref(storage, currentUser.uid);
-        await uploadBytesResumable(storageRef, newFile)
-
-        const url = `https://firebasestorage.googleapis.com/v0/b/threc-e1518.appspot.com/o/${currentUser.uid}?alt=media&token=`
-        const userRef = doc(db, "users", currentUser.uid);
-            await updateDoc(userRef, {
-                profilePicURL: profilePicURL
-        })
-        setProfilePicURL(url);
-        setCurrentUser({ name: currentUser.name, classification: currentUser.classification, email: currentUser.email, uid: currentUser.uid, profilePicURL: url })
-    }
-
     return (
         <VStack height="full" width="full" alignItems="center" justifyContent="space-around" safeArea >
             <Center>
-                <Box onTouchEnd={uploadImage} >
+                <Box>
                     { profilePicURL ? (
                         <Image source={{
                             uri: (profilePicURL as string)
