@@ -34,7 +34,7 @@ const CreatePosts: React.FC = () => {
 
                     <VStack marginY={2}>
                         <Text color="black" fontWeight="bold" marginY={1}>Location</Text>
-                        <Select selectedValue={location} placeholder="freshman" mt={1} color="white" onValueChange={location => setLocation(location)}>
+                        <Select selectedValue={location} placeholder="location" mt={1} color="white" onValueChange={location => setLocation(location)}>
                                     <Select.Item label="Student Rec Center" value="Student Recreation Center" />
                                     <Select.Item label="Southside Rec Center" value="Southside Recreation Center" />
                                     <Select.Item label="Polo Road Rec Center" value="Polo Road Rec Center" />
@@ -67,7 +67,7 @@ const CreatePosts: React.FC = () => {
                         <Input
                             keyboardType="numeric"
                             placeholder="3"
-                            value={numGuests}
+                            value={String(numGuests)}
                             onChangeText={numGuests => setNumGuests(Number(numGuests))}
                         />
                     </VStack>

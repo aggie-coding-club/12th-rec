@@ -84,7 +84,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
                             
                             <VStack marginY={2}>
                                 <Text color="light.100" fontWeight="bold" marginY={1}>Classification</Text>
-                                <Select selectedValue={classification} placeholder="freshman" mt={1} color="white" onValueChange={classification => setClassification(classification)}>
+                                <Select selectedValue={classification} placeholder="classification" mt={1} onValueChange={classification => setClassification(classification)}>
                                     <Select.Item label="freshman" value="freshman" />
                                     <Select.Item label="sophomore" value="sophomore" />
                                     <Select.Item label="junior" value="junior" />
