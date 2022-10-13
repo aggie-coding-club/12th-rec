@@ -69,6 +69,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
       email: userCredentials.user.email,
       uid: userCredentials.user.uid,
       profilePicURL: cloudinaryResult.secure_url,
+      posts: []
     })
 
     setCurrentUser({
@@ -77,6 +78,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
       email: userCredentials.user.email!,
       uid: userCredentials.user.uid,
       profilePicURL: cloudinaryResult.secure_url,
+      posts: []
     })
   };
 

@@ -21,6 +21,8 @@ const SettingsScreen: React.FC<Props> = ({ route, navigation }) => {
         await auth.signOut();
     }
 
+    console.log(currentUser.posts);
+
     return (
         <VStack height="full" width="full" alignItems="center" justifyContent="space-around" safeArea >
             <Center>

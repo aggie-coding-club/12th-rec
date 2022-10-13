@@ -4,6 +4,7 @@ export interface IUser {
     email: string
     uid: string
     profilePicURL: string | null
+    posts: string[]
 }
 
 export interface IPost {
