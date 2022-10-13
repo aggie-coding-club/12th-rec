@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RouteProp } from '@react-navigation/native';
 import { UserCredential, getAuth } from "firebase/auth"
-import { doc, updateDoc } from "firebase/firestore";
 
-import { db } from "../../firebase/firebaseConfig";
-import useImagePicker from "../../utils/useImagePicker";
 import { VStack,  Heading, Button, Center, Image, Box, Skeleton } from "native-base";
 
 import useAppStore from "../../store/useAppStore";
@@ -19,12 +16,6 @@ const SettingsScreen: React.FC<Props> = ({ route, navigation }) => {
     const auth = getAuth();
 
     const currentUser = useAppStore((state) => state.currentUser)
-    const setCurrentUser = useAppStore((state) => state.setCurrentUser)
-    const getImage = useImagePicker()
-
-    console.log(currentUser.profilePicURL)
-
-    const [profilePicURL, setProfilePicURL] = useState<unknown>(currentUser.profilePicURL);
 
     const handleLogOut = async () => {
         await auth.signOut();
@@ -34,16 +25,11 @@ const SettingsScreen: React.FC<Props> = ({ route, navigation }) => {
         <VStack height="full" width="full" alignItems="center" justifyContent="space-around" safeArea >
             <Center>
                 <Box>
-                    { profilePicURL ? (
-                        <Image source={{
-                            uri: (profilePicURL as string)
+                    <Image source={{
+                            uri: currentUser.profilePicURL!
                         }} alt="Alternate Text" size="xl" borderRadius={100} />
-                    ): (
-                        <>
-                            <Skeleton borderWidth={1} borderColor="coolGray.200" endColor="#A24857" size="20" rounded="full" marginY={4} />
-                        </>
-                    )  }
                 </Box>
+
                 <Heading fontSize="4xl" color="maroon">{currentUser.name}</Heading>
             </Center>
 

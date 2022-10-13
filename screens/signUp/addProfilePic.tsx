@@ -2,7 +2,7 @@ import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RouteProp } from "@react-navigation/native";
 
-import { Text, Box, Heading, Center, ZStack, Image, Link } from "native-base";
+import { Text, Box, ZStack, Image, Link } from "native-base";
 import { FontAwesome } from '@expo/vector-icons';
 
 interface Props {

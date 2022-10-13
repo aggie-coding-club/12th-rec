@@ -17,7 +17,6 @@ const CreatePosts: React.FC = () => {
         setDateTime(currentDate as Date);
       };
     
-
     return (
         <DismissKeyboardView>
             <Box padding={6} height="1/2" justifyContent="space-between" safeArea >

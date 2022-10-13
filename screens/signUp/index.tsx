@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import axios from "axios";
 
 import {
   VStack,
@@ -33,7 +34,6 @@ interface Props {
 const SignUpScreen: React.FC<Props> = ({ navigation }) => {
   const auth = getAuth();
 
-  const currentUser = useAppStore((state) => state.currentUser);
   const setCurrentUser = useAppStore((state) => state.setCurrentUser);
   const getImage = useImagePicker();
 
@@ -53,47 +53,31 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
 
     if (!image) return;
 
-    createUserWithEmailAndPassword(auth, `${email}@tamu.edu`, password).then(
-      async (userCredentials) => {
-        let base64Img = `data:image/jpg;base64,${image.base64}`;
+    const userCredentials = await createUserWithEmailAndPassword(auth, `${email}@tamu.edu`, password)
+    
+    let data = {
+      file: `data:image/jpg;base64,${image.base64}`,
+      upload_preset: "ojk7nay4",
+      public_id: userCredentials.user.uid,
+    };
 
-        let apiUrl = "https://api.cloudinary.com/v1_1/dtzsq6zws/image/upload";
+    const cloudinaryResult = await axios.post("https://api.cloudinary.com/v1_1/dtzsq6zws/image/upload", data).then(async (res) => res.data)
 
-        let data = {
-          file: base64Img,
-          upload_preset: "ojk7nay4",
-          public_id: userCredentials.user.uid,
-        };
+    await setDoc(doc(db, "users", userCredentials.user.uid), {
+      name,
+      classification,
+      email: userCredentials.user.email,
+      uid: userCredentials.user.uid,
+      profilePicURL: cloudinaryResult.secure_url,
+    })
 
-        fetch(apiUrl, {
-          body: JSON.stringify(data),
-          headers: {
-            "content-type": "application/json",
-          },
-          method: "POST",
-        })
-          .then(async (r) => {
-            let data = await r.json();
-            console.log(data.secure_url)
-            await setDoc(doc(db, "users", userCredentials.user.uid), {
-              name,
-              classification,
-              email: userCredentials.user.email,
-              uid: userCredentials.user.uid,
-              profilePicURL: data.secure_url,
-            }).then((res) => {
-                setCurrentUser({
-                    name,
-                    classification,
-                    email: userCredentials.user.email!,
-                    uid: userCredentials.user.uid,
-                    profilePicURL: data.secure_url,
-                  });
-            })
-          })
-          .catch((err) => console.log(err));
-      }
-    );
+    setCurrentUser({
+      name,
+      classification,
+      email: userCredentials.user.email!,
+      uid: userCredentials.user.uid,
+      profilePicURL: cloudinaryResult.secure_url,
+    })
   };
 
   const navigateToAddProfilePic = () => {
@@ -112,7 +96,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
           opacity={0.25}
           blurRadius={1.85}
         />
-
+        
         <Box
           width="full"
           height="3/4"

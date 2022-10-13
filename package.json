@@ -20,11 +20,15 @@
   "dependencies": {
     "@expo-google-fonts/alfa-slab-one": "^0.2.2",
     "@expo-google-fonts/inter": "^0.2.2",
+    "@react-native-community/datetimepicker": "4.0.0",
     "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.0",
+    "@types/axios": "^0.14.0",
+    "axios": "^1.1.2",
     "expo": "^44.0.0",
     "expo-font": "~10.0.4",
+    "expo-image-picker": "~12.0.1",
     "expo-status-bar": "~1.2.0",
     "firebase": "^9.10.0",
     "native-base": "3.4.0",
@@ -36,9 +40,7 @@
     "react-native-screens": "~3.10.1",
     "react-native-svg": "12.1.1",
     "react-native-web": "0.17.1",
-    "zustand": "^4.1.1",
-    "expo-image-picker": "~12.0.1",
-    "@react-native-community/datetimepicker": "4.0.0"
+    "zustand": "^4.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
