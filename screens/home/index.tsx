@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RouteProp } from '@react-navigation/native';
 import { collection, DocumentData, getDocs } from "firebase/firestore";
-import MapView from 'react-native-maps';
 
+import useAppStore from "../../store/useAppStore";
 import { db } from "../../firebase/firebaseConfig";
+import MapView from "../../components/mapview";
 
 import { Dimensions, StyleSheet } from "react-native";
 
@@ -24,22 +25,8 @@ const HomeScreen: React.FC<Props> = ({ route, navigation }) => {
     }, [])
 
     return (
-       <MapView style={styles.map}
-            initialRegion={{
-            latitude: 30.615619,
-            longitude: -96.341099,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0121,
-            }}
-        />
+       <MapView />
     )
 }
-
-const styles = StyleSheet.create({
-    map: {
-      width: Dimensions.get('window').width,
-      height: Dimensions.get('window').height,
-    },
-  });
 
 export default HomeScreen

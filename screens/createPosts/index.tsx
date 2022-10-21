@@ -38,7 +38,8 @@ const CreatePosts: React.FC = () => {
             coordinates: coordinates[location],
             dateTime,
             numGuests,
-            description
+            description,
+            userID: currentUser.uid
         }), updateDoc(doc(db, "users", currentUser.uid), {
             ...currentUser,
             posts: [...currentUser.posts, postID]
