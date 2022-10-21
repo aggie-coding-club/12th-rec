@@ -6,6 +6,7 @@ import { v4 as uuid } from "uuid";
 import { Box, Button, Heading, Input, TextArea, Text, VStack, HStack, Select } from "native-base";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
+import coordinates from "../../utils/coordinates";
 import useAppStore from "../../store/useAppStore";
 import { db } from "../../firebase/firebaseConfig";
 import DismissKeyboardView from "../../components/dismissKeyboardView";
@@ -29,10 +30,12 @@ const CreatePosts: React.FC = () => {
         if(!title || !location || !dateTime || !numGuests || !description) return
 
         const postID = uuid();
-    
+
         Promise.all([setDoc(doc(db, "posts", postID), {
             title,
             location,
+            // @ts-ignore
+            coordinates: coordinates[location],
             dateTime,
             numGuests,
             description
@@ -63,9 +66,8 @@ const CreatePosts: React.FC = () => {
                         <Select selectedValue={location} placeholder="location" mt={1} onValueChange={location => setLocation(location)}>
                                     <Select.Item label="Student Rec Center" value="Student Recreation Center" />
                                     <Select.Item label="Southside Rec Center" value="Southside Recreation Center" />
-                                    <Select.Item label="Polo Road Rec Center" value="Polo Road Rec Center" />
+                                    <Select.Item label="Polo Road Rec Center" value="Polo Road Recreation Center" />
                                     <Select.Item label="Natatorium" value="Texas A&M Natatorium" />
-                                    <Select.Item label="Outdoor Adventures" value="Outdoor Adventures" />
                                     <Select.Item label="Indoor Climbing Faucility" value="Indoor Climbing Faucility" />
                                     <Select.Item label="PEAP" value="Physical Education Activity Program Building (PEAP)" />
                                     <Select.Item label="Penberthy" value="Penberthy Rec Sports Complex" />

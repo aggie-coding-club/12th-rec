@@ -6,8 +6,6 @@ import MapView from 'react-native-maps';
 
 import { db } from "../../firebase/firebaseConfig";
 
-import { Text, VStack, Box } from "native-base";
-import { IPost } from "../../utils/interfaces";
 import { Dimensions, StyleSheet } from "react-native";
 
 interface Props {

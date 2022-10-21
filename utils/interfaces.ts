@@ -1,3 +1,4 @@
+
 export interface IUser {
     name: string
     classification: string
@@ -10,6 +11,7 @@ export interface IUser {
 export interface IPost {
     title: string,
     location: string,
+    address: string
     time: string
     description: string,
     userID: string
