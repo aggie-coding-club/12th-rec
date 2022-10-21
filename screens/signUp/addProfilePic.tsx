@@ -29,8 +29,6 @@ const AddProfilePic: React.FC<Props> = ({ navigation, route }) => {
                             <FontAwesome name="camera" size={100} color="white" />
                         </Box>
                     </Box>
-
-                    <Link _text={{ color: "light.50" }} >Continue without profile pic</Link>
                 </Box>
             </ZStack>
     )
