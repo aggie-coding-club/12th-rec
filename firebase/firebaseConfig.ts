@@ -15,17 +15,17 @@ import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
 
-  apiKey: "AIzaSyChIiVoGozpH_X953GNWF44R0PJgAi38Tw",
+  apiKey: FIREBASEAPIKEY,
 
-  authDomain: "threc-e1518.firebaseapp.com",
+  authDomain: FIREBASEAUTHDOMAIN,
 
-  projectId: "threc-e1518",
+  projectId: FIREBASEPROJECTID,
 
-  storageBucket: "threc-e1518.appspot.com",
+  storageBucket: FIREBASESTORAGEBUCKET,
 
-  messagingSenderId: "958371623547",
+  messagingSenderId: FIREBASEMESSAGINGSENDERID,
 
-  appId: "1:958371623547:web:d95fa2c421df7efc53a8de"
+  appId: FIREBASEAPID
 
 };
 
