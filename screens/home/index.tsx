@@ -6,8 +6,10 @@ import { collection, DocumentData, getDocs } from "firebase/firestore";
 import useAppStore from "../../store/useAppStore";
 import { db } from "../../firebase/firebaseConfig";
 import MapView from "../../components/mapview";
+import { IPost } from "../../utils/interfaces"
 
 import { Dimensions, StyleSheet } from "react-native";
+import { Container, Text } from "native-base";
 
 interface Props {
     navigation: NativeStackNavigationProp<any, any>
@@ -15,17 +17,21 @@ interface Props {
 }
 
 const HomeScreen: React.FC<Props> = ({ route, navigation }) => {
-    const [posts, setPosts] = useState<DocumentData[]>();
+    const [posts, setPosts] = useState<IPost[]>();
 
     useEffect(() => {
         getDocs(collection(db, "posts")).then((res) => {
             const data = res.docs.map((doc) => doc.data())
-            setPosts(data);
+            setPosts(data as IPost[]);
         })
     }, [])
 
     return (
-       <MapView />
+       <Container>
+        {
+            <MapView posts={posts} />
+        }
+       </Container>
     )
 }
 

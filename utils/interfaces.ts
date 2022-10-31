@@ -11,7 +11,7 @@ export interface IUser {
 export interface IPost {
     title: string,
     location: string,
-    address: string
+    coordinates: string
     time: string
     description: string,
     userID: string

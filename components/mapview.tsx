@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import React from "react";
 
-import { Text } from "native-base"
+import { Box, Text } from "native-base"
 import { StyleSheet, Dimensions } from "react-native";
 import MapView, { Marker } from 'react-native-maps';
 
-import { db } from "../firebase/firebaseConfig";
+import { IPost } from "../utils/interfaces";
 
 interface MarkerProps {
     title: string
     description: string
-    latitude: number
-    longitude: number
+    coordinates: string
 }
-const CustomMarker: React.FC<MarkerProps> = ({ title, description, latitude, longitude }) => {
+const CustomMarker: React.FC<MarkerProps> = ({ title, description, coordinates }) => {
+    const latitude = Number(coordinates.split(" ")[0])
+    const longitude = Number(coordinates.split(" ")[1])
+    
     return (
         <Marker coordinate = {{latitude, longitude}}
             pinColor = {"maroon"} // any color
@@ -22,9 +23,11 @@ const CustomMarker: React.FC<MarkerProps> = ({ title, description, latitude, lon
     )
 }
 
-const CustomMapView: React.FC = () => {
-    const [coordinates, setCoordinates] = useState<any[]>([]);
+interface MapViewProps {
+    posts?: IPost[]
+}
 
+const CustomMapView: React.FC<MapViewProps> = ({ posts }) => {
     return (
         <MapView style={styles.map}
             initialRegion={{
@@ -32,7 +35,16 @@ const CustomMapView: React.FC = () => {
             longitude: -96.341099,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0121,
-            }}>
+        }}>
+
+{
+    posts ? (
+        posts.map((post, index) => (
+            <CustomMarker title={post.time} description={post.description} coordinates={post.coordinates} /> 
+          ))
+    ) : <Box></Box>
+}
+
         </MapView>
     )
 };

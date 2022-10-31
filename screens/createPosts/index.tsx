@@ -18,7 +18,7 @@ const CreatePosts: React.FC = () => {
     const [title, setTitle] = useState<string>();
     const [location, setLocation] = useState<string>();
     const [dateTime, setDateTime] = useState<Date>(new Date());
-    const [numGuests, setNumGuests] = useState<number>(0);
+    const [numGuests, setNumGuests] = useState<number>();
     const [description, setDescription] = useState<string>();
 
     const changeDateTime = (event: unknown, selectedDate: unknown) => {
@@ -61,7 +61,7 @@ const CreatePosts: React.FC = () => {
                         <Text color="black" fontWeight="bold" marginY={1}>Title</Text>
                         <Input value={title} onChangeText={title => setTitle(title)} type="text" placeholder="3v3 Basketball" color="black" />
                     </VStack>
-
+                    
                     <VStack marginY={2}>
                         <Text color="black" fontWeight="bold" marginY={1}>Location</Text>
                         <Select selectedValue={location} placeholder="location" mt={1} onValueChange={location => setLocation(location)}>
@@ -82,7 +82,7 @@ const CreatePosts: React.FC = () => {
                         <DateTimePicker
                                 display="compact"
                                 mode="datetime"
-                                style={{ width: "48%" }}
+                                style={{ width: "50%" }}
                                 value={dateTime}
                                 onChange={changeDateTime}
                         />
@@ -96,7 +96,7 @@ const CreatePosts: React.FC = () => {
                         <Input
                             keyboardType="numeric"
                             placeholder="3"
-                            value={String(numGuests)}
+                            value={numGuests as unknown as string}
                             onChangeText={numGuests => setNumGuests(Number(numGuests))}
                         />
                     </VStack>
