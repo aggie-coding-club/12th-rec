@@ -20,6 +20,7 @@
   "dependencies": {
     "@expo-google-fonts/alfa-slab-one": "^0.2.2",
     "@expo-google-fonts/inter": "^0.2.2",
+    "@gorhom/bottom-sheet": "^4.4.5",
     "@react-native-community/datetimepicker": "4.0.0",
     "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/native": "^6.0.13",
