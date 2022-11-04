@@ -16,22 +16,15 @@ const PostDetails: React.FC<PostDetails> = ({ route }) => {
   const { post } = route.params;
 
   return (
-    <Box padding={6} height="1/2" justifyContent="space-between" safeArea>
+    <Box padding={6} height="1/2" safeArea >
       <VStack>
         <Heading size="xl" color="maroon">
-          Create a post
+          {post.title}
         </Heading>
-        <Text>Let your peers know when and where to meet you.</Text>
+        <Text>{post.description}</Text>
       </VStack>
 
       <VStack marginY={4}>
-        <VStack marginY={2}>
-          <Text color="black" fontWeight="bold" marginY={1}>
-            Title
-          </Text>
-          <Text>{post.title}</Text>
-        </VStack>
-
         <VStack marginY={2}>
           <Text color="black" fontWeight="bold" marginY={1}>
             Location
@@ -44,25 +37,6 @@ const PostDetails: React.FC<PostDetails> = ({ route }) => {
             Date/Time
           </Text>
           <Text>{post.dateTime}</Text>
-        </VStack>
-
-        <VStack marginY={2}>
-          <Text color="black" fontWeight="bold" marginY={1}>
-            Number of guests
-          </Text>
-        </VStack>
-
-        <VStack marginY={2}>
-          <Text color="black" fontWeight="bold" marginY={1}>
-            Description
-          </Text>
-          <TextArea
-            h={40}
-            placeholder="Description"
-            alignItems="flex-start"
-            value={post.description}
-            editable={false}
-          />
         </VStack>
       </VStack>
     </Box>

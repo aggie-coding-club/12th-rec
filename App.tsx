@@ -68,7 +68,7 @@ export function SettingsStackNavigator() {
   return (
     <Stack.Navigator  screenOptions={{ headerShown: false }}>
       <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
-      <Stack.Screen name="PersonalInformation" component={PersonalInformationScreen} />
+      <Stack.Screen name="PersonalInformationScreen" component={PersonalInformationScreen} />
   </Stack.Navigator>
   );
 }
@@ -77,7 +77,7 @@ export function HomeStackNavigator() {
   return (
     <Stack.Navigator  screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      <Stack.Screen name="PostDetails" component={PostDetailsScreen} options={{ presentation: "modal" }} />
+      <Stack.Screen name="PostDetailsScreen" component={PostDetailsScreen} options={{ presentation: "modal" }} />
   </Stack.Navigator>
   );
 }
@@ -109,13 +109,13 @@ export function TabNavigator() {
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
 
-        if (route.name === 'Home') {
+        if (route.name === 'HomeStackNavigator') {
           iconName = focused
             ? 'home'
             : 'home-outline';
-        } else if (route.name === 'Settings') {
+        } else if (route.name === 'SettingsStackNavigator') {
           iconName = focused ? 'person' : 'person-outline';
-        } else if (route.name === 'CreatePosts') {
+        } else if (route.name === 'CreatePostsScreen') {
           iconName = focused ? 'add-circle' : 'add-circle-outline';
         }
 
@@ -127,9 +127,9 @@ export function TabNavigator() {
       tabBarInactiveTintColor: 'gray',
       tabBarShowLabel: false
     })}>
-              <Tab.Screen name="Home" component={HomeStackNavigator} />
-              <Tab.Screen name="CreatePosts" component={CreatePostsScreen} />
-              <Tab.Screen name="Settings" component={SettingsStackNavigator}/>
+              <Tab.Screen name="HomeStackNavigator" component={HomeStackNavigator} />
+              <Tab.Screen name="CreatePostsScreen" component={CreatePostsScreen} />
+              <Tab.Screen name="SettingsStackNavigator" component={SettingsStackNavigator}/>
       </Tab.Navigator>
   )
 }

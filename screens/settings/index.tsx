@@ -21,8 +21,6 @@ const SettingsScreen: React.FC<Props> = ({ route, navigation }) => {
         await auth.signOut();
     }
 
-    console.log(currentUser.posts);
-
     return (
         <VStack height="full" width="full" alignItems="center" justifyContent="space-around" safeArea >
             <Center>
@@ -36,7 +34,7 @@ const SettingsScreen: React.FC<Props> = ({ route, navigation }) => {
             </Center>
 
             <VStack justifyContent="space-around" width="75%" >
-                <Button width="100%" marginY={4} backgroundColor="maroon"onPress={() => navigation.navigate("PersonalInformation")}>Personal Information</Button>
+                <Button width="100%" marginY={4} backgroundColor="maroon"onPress={() => navigation.navigate("PersonalInformationScreen")}>Personal Information</Button>
                 <Button width="100%" marginY={4} backgroundColor="maroon">How It Works</Button>
                 <Button width="100%"marginY={4} backgroundColor="maroon">Help</Button>
             </VStack>
