@@ -1,33 +1,22 @@
 import React from "react";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { Box, Text } from "native-base"
+import { Box } from "native-base"
 import { StyleSheet, Dimensions } from "react-native";
 import MapView, { Marker } from 'react-native-maps';
 
 import { IPost } from "../utils/interfaces";
 
-interface MarkerProps {
-    title: string
-    description: string
-    coordinates: string
-}
-const CustomMarker: React.FC<MarkerProps> = ({ title, description, coordinates }) => {
-    const latitude = Number(coordinates.split(" ")[0])
-    const longitude = Number(coordinates.split(" ")[1])
-    
-    return (
-        <Marker coordinate = {{latitude, longitude}}
-            pinColor = {"maroon"} // any color
-            title={title}
-            description={description}/>
-    )
-}
-
 interface MapViewProps {
     posts?: IPost[]
+    navigation: NativeStackNavigationProp<any, any>;
 }
 
-const CustomMapView: React.FC<MapViewProps> = ({ posts }) => {
+const CustomMapView: React.FC<MapViewProps> = ({ posts, navigation }) => {
+    const openDetails = (post: IPost) => {
+        navigation.navigate("PostDetails", { post })
+    }
+
     return (
         <MapView style={styles.map}
             initialRegion={{
@@ -39,9 +28,14 @@ const CustomMapView: React.FC<MapViewProps> = ({ posts }) => {
 
 {
     posts ? (
-        posts.map((post, index) => (
-            <CustomMarker title={post.time} description={post.description} coordinates={post.coordinates} /> 
-          ))
+        posts.map((post, index) => {
+            const latitude = Number(post.coordinates.split(" ")[0])
+            const longitude = Number(post.coordinates.split(" ")[1])
+            
+            return (
+                <Marker coordinate={{ latitude, longitude }} pinColor = {"maroon"}  onPress={() => openDetails(post)} />
+            )
+        })
     ) : <Box></Box>
 }
 

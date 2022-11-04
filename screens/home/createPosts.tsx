@@ -27,6 +27,7 @@ const CreatePosts: React.FC = () => {
       };
     
     const createPost = async () => {
+
         if(!title || !location || !dateTime || !numGuests || !description) return
 
         const postID = uuid();
@@ -36,7 +37,7 @@ const CreatePosts: React.FC = () => {
             location,
             // @ts-ignore
             coordinates: coordinates[location],
-            dateTime,
+            dateTime: dateTime.toISOString(),
             numGuests,
             description,
             userID: currentUser.uid

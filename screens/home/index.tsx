@@ -3,13 +3,11 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RouteProp } from '@react-navigation/native';
 import { collection, DocumentData, getDocs } from "firebase/firestore";
 
-import useAppStore from "../../store/useAppStore";
 import { db } from "../../firebase/firebaseConfig";
 import MapView from "../../components/mapview";
 import { IPost } from "../../utils/interfaces"
 
-import { Dimensions, StyleSheet } from "react-native";
-import { Container, Text } from "native-base";
+import { Container } from "native-base";
 
 interface Props {
     navigation: NativeStackNavigationProp<any, any>
@@ -29,7 +27,7 @@ const HomeScreen: React.FC<Props> = ({ route, navigation }) => {
     return (
        <Container>
         {
-            <MapView posts={posts} />
+            <MapView posts={posts} navigation={navigation} />
         }
        </Container>
     )

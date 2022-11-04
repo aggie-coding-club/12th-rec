@@ -14,7 +14,8 @@ import HomeScreen from "./screens/home";
 import SettingsScreen from "./screens/settings";
 import PersonalInformationScreen from "./screens/settings/personalInformation";
 import AddProfilePicScreen from "./screens/signUp/addProfilePic";
-import CreatePostsScreen from "./screens/createPosts";
+import CreatePostsScreen from "./screens/home/createPosts";
+import PostDetailsScreen from "./screens/home/postDetails";
 
 import useAppStore from "./store/useAppStore";
 import { db } from "./firebase/firebaseConfig";
@@ -72,6 +73,16 @@ export function SettingsStackNavigator() {
   );
 }
 
+export function HomeStackNavigator() {
+  return (
+    <Stack.Navigator  screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="PostDetails" component={PostDetailsScreen} options={{ presentation: "modal" }} />
+  </Stack.Navigator>
+  );
+}
+
+
 export function AuthStackNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -116,7 +127,7 @@ export function TabNavigator() {
       tabBarInactiveTintColor: 'gray',
       tabBarShowLabel: false
     })}>
-              <Tab.Screen name="Home" component={HomeScreen} />
+              <Tab.Screen name="Home" component={HomeStackNavigator} />
               <Tab.Screen name="CreatePosts" component={CreatePostsScreen} />
               <Tab.Screen name="Settings" component={SettingsStackNavigator}/>
       </Tab.Navigator>

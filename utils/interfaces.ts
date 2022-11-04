@@ -1,4 +1,3 @@
-
 export interface IUser {
     name: string
     classification: string
@@ -12,7 +11,7 @@ export interface IPost {
     title: string,
     location: string,
     coordinates: string
-    time: string
+    dateTime: string
     description: string,
     userID: string
 }
