@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import RBSheet from "react-native-raw-bottom-sheet";
 
-import { Box } from "native-base"
+
+import { Box, Text } from "native-base"
 import { StyleSheet, Dimensions } from "react-native";
 import MapView, { Marker } from 'react-native-maps';
+
+import PostDetails from "./postDetails";
 
 import { IPost } from "../utils/interfaces";
 
@@ -13,7 +17,17 @@ interface MapViewProps {
 }
 
 const CustomMapView: React.FC<MapViewProps> = ({ posts, navigation }) => {
+    const refRBSheet = useRef();
+    const [displayPost, setDisplayPost] = useState<IPost>()
+
+    const handleMarkerTouched = (post: IPost) => {
+        setDisplayPost(post);
+        // @ts-ignore
+        refRBSheet.current!.open();
+    }
+
     return (
+        <>
         <MapView style={styles.map}
             initialRegion={{
             latitude: 30.615619,
@@ -23,16 +37,35 @@ const CustomMapView: React.FC<MapViewProps> = ({ posts, navigation }) => {
         }}>
 
             {posts ? (
-                    posts.map((post, index) => {
-                        const latitude = Number(post.coordinates.split(" ")[0])
-                        const longitude = Number(post.coordinates.split(" ")[1])
+                posts.map((post, index) => {
+                    const latitude = Number(post.coordinates.split(" ")[0])
+                    const longitude = Number(post.coordinates.split(" ")[1])
                         
-                        return (
-                            <Marker key={index} coordinate={{ latitude, longitude }} pinColor = {"maroon"}  onPress={() => navigation.navigate("PostDetailsScreen", { post })} />
-                        )
-                    })
-                ) : <Box></Box>}
+                    return (
+                        <Marker key={index} coordinate={{ latitude, longitude }} pinColor = {"maroon"}  onPress={() => handleMarkerTouched(post)} />
+                    )
+            })
+                    ) : <Box></Box>}
         </MapView>
+
+        <RBSheet
+        // @ts-ignore
+        ref={refRBSheet}
+        closeOnDragDown={true}
+        closeOnPressMask={false}
+        customStyles={{
+          wrapper: {
+            backgroundColor: "transparent"
+          },
+          draggableIcon: {
+            backgroundColor: "#000"
+          }
+        }}
+      >
+        <PostDetails post={displayPost!} />
+      </RBSheet>
+
+        </>
     )
 };
 

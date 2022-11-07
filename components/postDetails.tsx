@@ -1,22 +1,16 @@
 import React from "react";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RouteProp } from "@react-navigation/native";
 
-import { IPost } from "../../utils/interfaces";
+import { IPost } from "../utils/interfaces";
 
 import { Box, VStack, Heading, Text, TextArea } from "native-base";
 
 interface PostDetails {
   post: IPost;
-  navigation: NativeStackNavigationProp<any, any>;
-  route: RouteProp<{ params: { post: IPost } }, "params">;
 }
 
-const PostDetails: React.FC<PostDetails> = ({ route }) => {
-  const { post } = route.params;
-
+const PostDetails: React.FC<PostDetails> = ({ post }) => {
   return (
-    <Box padding={6} height="1/2" safeArea >
+    <Box padding={6} height="1/2" safeArea>
       <VStack>
         <Heading size="xl" color="maroon">
           {post.title}

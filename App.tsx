@@ -1,5 +1,5 @@
 import React from "react";
-import Ionicons from "@expo/vector-icons/Ionicons"
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -8,14 +8,13 @@ import { SSRProvider } from "react-aria";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
-import SignInScreen from "./screens/signIn";
-import SignUpScreen from "./screens/signUp";
+import SignInScreen from "./screens/auth/signInScreen";
+import SignUpScreen from "./screens/auth/signUpScreen";
 import HomeScreen from "./screens/home";
 import SettingsScreen from "./screens/settings";
 import PersonalInformationScreen from "./screens/settings/personalInformation";
-import AddProfilePicScreen from "./screens/signUp/addProfilePic";
+import AddProfilePicScreen from "./screens/auth/addProfilePic";
 import CreatePostsScreen from "./screens/home/createPosts";
-import PostDetailsScreen from "./screens/home/postDetails";
 
 import useAppStore from "./store/useAppStore";
 import { db } from "./firebase/firebaseConfig";
@@ -66,72 +65,62 @@ const theme = extendTheme({
 
 export function SettingsStackNavigator() {
   return (
-    <Stack.Navigator  screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
-      <Stack.Screen name="PersonalInformationScreen" component={PersonalInformationScreen} />
-  </Stack.Navigator>
+      <Stack.Screen
+        name="PersonalInformationScreen"
+        component={PersonalInformationScreen}
+      />
+    </Stack.Navigator>
   );
 }
-
-export function HomeStackNavigator() {
-  return (
-    <Stack.Navigator  screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      <Stack.Screen name="PostDetailsScreen" component={PostDetailsScreen} options={{ presentation: "modal" }} />
-  </Stack.Navigator>
-  );
-}
-
 
 export function AuthStackNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen
-                name="SignInScreen"
-                component={SignInScreen}
-              />
-              <Stack.Screen
-                name="SignUpSceen"
-                component={SignUpScreen}
-              />
-              <Stack.Screen
-                name="AddProfilePicScreen"
-                component={AddProfilePicScreen}
-                options={{ presentation: "modal" }}
-              />
-          </Stack.Navigator>
-  )
+      <Stack.Screen name="SignInScreen" component={SignInScreen} />
+      <Stack.Screen name="SignUpSceen" component={SignUpScreen} />
+      <Stack.Screen
+        name="AddProfilePicScreen"
+        component={AddProfilePicScreen}
+        options={{ presentation: "modal" }}
+      />
+    </Stack.Navigator>
+  );
 }
 
 export function TabNavigator() {
   return (
-    <Tab.Navigator screenOptions={({ route }) => ({
-      tabBarIcon: ({ focused, color, size }) => {
-        let iconName;
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
 
-        if (route.name === 'HomeStackNavigator') {
-          iconName = focused
-            ? 'home'
-            : 'home-outline';
-        } else if (route.name === 'SettingsStackNavigator') {
-          iconName = focused ? 'person' : 'person-outline';
-        } else if (route.name === 'CreatePostsScreen') {
-          iconName = focused ? 'add-circle' : 'add-circle-outline';
-        }
+          if (route.name === "HomeScreen") {
+            iconName = focused ? "home" : "home-outline";
+          } else if (route.name === "SettingsStackNavigator") {
+            iconName = focused ? "person" : "person-outline";
+          } else if (route.name === "CreatePostsScreen") {
+            iconName = focused ? "add-circle" : "add-circle-outline";
+          }
 
-        // You can return any component that you like here!
-        return <Ionicons name={iconName} size={size} color={color} />;
-      },
-      headerShown: false,
-      tabBarActiveTintColor: 'maroon',
-      tabBarInactiveTintColor: 'gray',
-      tabBarShowLabel: false
-    })}>
-              <Tab.Screen name="HomeStackNavigator" component={HomeStackNavigator} />
-              <Tab.Screen name="CreatePostsScreen" component={CreatePostsScreen} />
-              <Tab.Screen name="SettingsStackNavigator" component={SettingsStackNavigator}/>
-      </Tab.Navigator>
-  )
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        headerShown: false,
+        tabBarActiveTintColor: "maroon",
+        tabBarInactiveTintColor: "gray",
+        tabBarShowLabel: false,
+      })}
+    >
+      <Tab.Screen name="HomeScreen" component={HomeScreen} />
+      <Tab.Screen name="CreatePostsScreen" component={CreatePostsScreen} />
+      <Tab.Screen
+        name="SettingsStackNavigator"
+        component={SettingsStackNavigator}
+      />
+    </Tab.Navigator>
+  );
 }
 
 export default function App() {
@@ -142,29 +131,31 @@ export default function App() {
 
   const auth = getAuth();
   auth.onAuthStateChanged(async (user) => {
-    if(user) {
+    if (user) {
       const userRef = doc(db, "users", user.uid);
-      const userData = await getDoc(userRef).then((res) => res.data()) as IUser;
-      setCurrentUser({...userData})
-      setUserIsSignedIn(true)
-      return
+      const userData = (await getDoc(userRef).then((res) =>
+        res.data()
+      )) as IUser;
+      setCurrentUser({ ...userData });
+      setUserIsSignedIn(true);
+      return;
     }
 
-    setUserIsSignedIn(false)
-  })
+    setUserIsSignedIn(false);
+  });
 
   return (
     <SSRProvider>
-    <NativeBaseProvider theme={theme}>
-      <NavigationContainer>
-      {!userIsSignedIn ? (
+      <NativeBaseProvider theme={theme}>
+        <NavigationContainer>
+          {!userIsSignedIn ? (
             // No token found, user isn't signed in
             <AuthStackNavigator />
           ) : (
             <TabNavigator />
           )}
-      </NavigationContainer>
-    </NativeBaseProvider>
+        </NavigationContainer>
+      </NativeBaseProvider>
     </SSRProvider>
   );
 }
