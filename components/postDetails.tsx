@@ -1,8 +1,10 @@
 import React from "react";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { Ionicons } from '@expo/vector-icons';
 
 import { IPost } from "../utils/interfaces";
 
-import { Box, VStack, Heading, Text, TextArea } from "native-base";
+import { Box, VStack, Heading, Text, Flex } from "native-base";
 
 interface PostDetails {
   post: IPost;
@@ -10,28 +12,29 @@ interface PostDetails {
 
 const PostDetails: React.FC<PostDetails> = ({ post }) => {
   return (
-    <Box padding={6} height="1/2" safeArea>
+    <Box paddingRight={6} paddingLeft={6} >
       <VStack>
         <Heading size="xl" color="maroon">
           {post.title}
         </Heading>
-        <Text>{post.description}</Text>
+        <Text paddingTop={2}>{post.description}</Text>
       </VStack>
 
       <VStack marginY={4}>
-        <VStack marginY={2}>
-          <Text color="black" fontWeight="bold" marginY={1}>
-            Location
-          </Text>
-          <Text>{post.location}</Text>
-        </VStack>
+        <Flex marginY={2} flexDirection="row" alignItems="center" >
+          <Ionicons name="location-outline" size={24} color="maroon" />
+          <Text paddingLeft={2}>{post.location}</Text>
+        </Flex>
 
-        <VStack marginY={2}>
-          <Text color="black" fontWeight="bold" marginY={1}>
-            Date/Time
-          </Text>
-          <Text>{post.dateTime}</Text>
-        </VStack>
+        <Flex marginY={2} flexDirection="row" alignItems="center" >
+          <Ionicons name="time-outline" size={24} color="maroon" />
+          <DateTimePicker 
+            display="compact"
+            mode="datetime"
+            style={{ width: "49%" }}
+            value={post.dateTime as unknown as Date}
+          />
+        </Flex>
       </VStack>
     </Box>
   );
