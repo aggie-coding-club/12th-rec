@@ -8,6 +8,7 @@ import MapView from "../../components/mapview";
 import { IPost } from "../../utils/interfaces"
 
 import { Container } from "native-base";
+import useAppStore from "../../store/useAppStore";
 
 interface Props {
     navigation: NativeStackNavigationProp<any, any>
@@ -15,14 +16,7 @@ interface Props {
 }
 
 const HomeScreen: React.FC<Props> = ({ route, navigation }) => {
-    const [posts, setPosts] = useState<IPost[]>();
-
-    useEffect(() => {
-        getDocs(collection(db, "posts")).then((res) => {
-            const data = res.docs.map((doc) => doc.data())
-            setPosts(data as IPost[]);
-        })
-    }, [])
+    const posts = useAppStore((state) => state.posts)
 
     return (
        <Container>

@@ -32,7 +32,7 @@ const PostDetails: React.FC<PostDetails> = ({ post }) => {
             display="compact"
             mode="datetime"
             style={{ width: "49%" }}
-            value={post.dateTime as unknown as Date}
+            value={new Date(post.dateTime as unknown as Date)}
           />
         </Flex>
       </VStack>

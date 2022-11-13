@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import axios from "axios";
 
 import {
   VStack,
@@ -27,11 +25,7 @@ import { db } from "../../firebase/firebaseConfig";
 import useAppStore from "../../store/useAppStore";
 import useImagePicker from "../../utils/useImagePicker";
 
-interface Props {
-  navigation: NativeStackNavigationProp<any, any>;
-}
-
-const SignUpScreen: React.FC<Props> = ({ navigation }) => {
+const SignUpScreen: React.FC = () => {
   const auth = getAuth();
 
   const setCurrentUser = useAppStore((state) => state.setCurrentUser);
@@ -49,26 +43,14 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
   }, [password, confirmPassword]);
 
   const handleSignUp = async () => {
-    const image = await getImage();
-
-    if (!image) return;
-
     const userCredentials = await createUserWithEmailAndPassword(auth, `${email}@tamu.edu`, password)
-    
-    let data = {
-      file: `data:image/jpg;base64,${image.base64}`,
-      upload_preset: "ojk7nay4",
-      public_id: userCredentials.user.uid,
-    };
-
-    const cloudinaryResult = await axios.post("https://api.cloudinary.com/v1_1/dtzsq6zws/image/upload", data).then(async (res) => res.data)
-
+  
     await setDoc(doc(db, "users", userCredentials.user.uid), {
       name,
       classification,
       email: userCredentials.user.email,
       uid: userCredentials.user.uid,
-      profilePicURL: cloudinaryResult.secure_url,
+      profilePicURL: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
       posts: []
     })
 
@@ -77,15 +59,9 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
       classification,
       email: userCredentials.user.email!,
       uid: userCredentials.user.uid,
-      profilePicURL: cloudinaryResult.secure_url,
+      profilePicURL: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
       posts: []
     })
-  };
-
-  const navigateToAddProfilePic = () => {
-    if (!name || !email || !password || !classification || isInvalid) return;
-
-    navigation.navigate("AddProfilePicScreen", { uploadImage: handleSignUp });
   };
 
   return (
@@ -208,7 +184,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
                 </FormControl.ErrorMessage>
               </VStack>
               <VStack marginY={2}>
-                <Button onPress={navigateToAddProfilePic} colorScheme="success">
+                <Button onPress={handleSignUp} colorScheme="success">
                   Sign Up
                 </Button>
               </VStack>

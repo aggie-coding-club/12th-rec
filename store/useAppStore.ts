@@ -1,6 +1,6 @@
 import create from 'zustand'
 import { UserCredential } from 'firebase/auth';
-import { IUser } from "../utils/interfaces";
+import { IPost, IUser } from "../utils/interfaces";
 
 interface AppState {
   userIsSignedIn: boolean
@@ -8,6 +8,9 @@ interface AppState {
 
   currentUser: IUser
   setCurrentUser: (newUser: IUser) => void
+
+  posts: IPost[]
+  setPosts: (newPosts: IPost[]) => void
 }
 
 const useAppStore = create<AppState>()((set) => ({
@@ -16,6 +19,9 @@ const useAppStore = create<AppState>()((set) => ({
 
   currentUser: { name: "", email: "", classification: "", uid: "", profilePicURL: null, posts: [] },
   setCurrentUser: (newUser) => set((state) => ({ currentUser: newUser })),
+
+  posts: [],
+  setPosts: (newPosts) => set((state) => ({ posts: [...state.posts, ...newPosts] }))
 }))
 
 export default useAppStore;

@@ -6,19 +6,18 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NativeBaseProvider, extendTheme } from "native-base";
 import { SSRProvider } from "react-aria";
 import { getAuth } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 
 import SignInScreen from "./screens/auth/signInScreen";
 import SignUpScreen from "./screens/auth/signUpScreen";
 import HomeScreen from "./screens/home";
 import SettingsScreen from "./screens/settings";
 import PersonalInformationScreen from "./screens/settings/personalInformation";
-import AddProfilePicScreen from "./screens/auth/addProfilePic";
 import CreatePostsScreen from "./screens/home/createPosts";
 
 import useAppStore from "./store/useAppStore";
 import { db } from "./firebase/firebaseConfig";
-import { IUser } from "./utils/interfaces";
+import { IPost, IUser } from "./utils/interfaces";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -80,11 +79,6 @@ export function AuthStackNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="SignInScreen" component={SignInScreen} />
       <Stack.Screen name="SignUpSceen" component={SignUpScreen} />
-      <Stack.Screen
-        name="AddProfilePicScreen"
-        component={AddProfilePicScreen}
-        options={{ presentation: "modal" }}
-      />
     </Stack.Navigator>
   );
 }
@@ -129,6 +123,8 @@ export default function App() {
 
   const setCurrentUser = useAppStore((state) => state.setCurrentUser);
 
+  const setPosts = useAppStore((state) => state.setPosts);
+
   const auth = getAuth();
   auth.onAuthStateChanged(async (user) => {
     if (user) {
@@ -136,6 +132,12 @@ export default function App() {
       const userData = (await getDoc(userRef).then((res) =>
         res.data()
       )) as IUser;
+
+      getDocs(collection(db, "posts")).then((res) => {
+        const data = res.docs.map((doc) => doc.data());
+        setPosts(data as IPost[]);
+      });
+
       setCurrentUser({ ...userData });
       setUserIsSignedIn(true);
       return;

@@ -14,11 +14,11 @@ import DismissKeyboardView from "../../components/dismissKeyboardView";
 const CreatePosts: React.FC = () => {
     const currentUser = useAppStore((state) => state.currentUser)
     const setCurrentUser = useAppStore((state) => state.setCurrentUser)
+    const setPosts = useAppStore((state) => state.setPosts)
 
     const [title, setTitle] = useState<string>();
     const [location, setLocation] = useState<string>();
     const [dateTime, setDateTime] = useState<Date>(new Date());
-    const [numGuests, setNumGuests] = useState<number>();
     const [description, setDescription] = useState<string>();
 
     const changeDateTime = (event: unknown, selectedDate: unknown) => {
@@ -28,7 +28,7 @@ const CreatePosts: React.FC = () => {
     
     const createPost = async () => {
 
-        if(!title || !location || !dateTime || !numGuests || !description) return
+        if(!title || !location || !dateTime || !description) return
 
         const postID = uuid();
 
@@ -38,13 +38,14 @@ const CreatePosts: React.FC = () => {
             // @ts-ignore
             coordinates: coordinates[location],
             dateTime: dateTime.toISOString(),
-            numGuests,
             description,
             userID: currentUser.uid
         }), updateDoc(doc(db, "users", currentUser.uid), {
             ...currentUser,
             posts: [...currentUser.posts, postID]
         })]).then(() => {
+            setPosts([{ title, location, coordinates: coordinates[location], dateTime: dateTime.toISOString(), description, userID: currentUser.uid }])
+
             setCurrentUser({ ...currentUser, posts: [...currentUser.posts, postID] })
         })
     }
@@ -90,16 +91,6 @@ const CreatePosts: React.FC = () => {
                             <Box> </Box>
                         </HStack>
  
-                    </VStack>
-
-                    <VStack marginY={2}>
-                        <Text color="black" fontWeight="bold" marginY={1}>Number of guests</Text>
-                        <Input
-                            keyboardType="numeric"
-                            placeholder="3"
-                            value={numGuests as unknown as string}
-                            onChangeText={numGuests => setNumGuests(Number(numGuests))}
-                        />
                     </VStack>
 
                     <VStack marginY={2}>
