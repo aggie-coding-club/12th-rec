@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RouteProp } from '@react-navigation/native';
-import { collection, DocumentData, getDocs } from "firebase/firestore";
 
-import { db } from "../../firebase/firebaseConfig";
 import MapView from "../../components/mapview";
-import { IPost } from "../../utils/interfaces"
 
 import { Container } from "native-base";
 import useAppStore from "../../store/useAppStore";
@@ -21,7 +18,7 @@ const HomeScreen: React.FC<Props> = ({ route, navigation }) => {
     return (
        <Container>
         {
-            <MapView posts={posts} navigation={navigation} />
+            <MapView posts={posts} viewPost={route.params?.viewPost} />
         }
        </Container>
     )

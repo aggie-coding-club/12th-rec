@@ -1,7 +1,5 @@
-import React, { useRef, useState } from "react";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React, { useEffect, useRef, useState } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
-
 
 import { Box, Text } from "native-base"
 import { StyleSheet, Dimensions } from "react-native";
@@ -13,10 +11,10 @@ import { IPost } from "../utils/interfaces";
 
 interface MapViewProps {
     posts?: IPost[]
-    navigation: NativeStackNavigationProp<any, any>;
+    viewPost? : IPost
 }
 
-const CustomMapView: React.FC<MapViewProps> = ({ posts, navigation }) => {
+const CustomMapView: React.FC<MapViewProps> = ({ posts, viewPost }) => {
     const refRBSheet = useRef();
     const [displayPost, setDisplayPost] = useState<IPost>()
 
@@ -25,6 +23,10 @@ const CustomMapView: React.FC<MapViewProps> = ({ posts, navigation }) => {
         // @ts-ignore
         refRBSheet.current!.open();
     }
+
+    useEffect(() => {
+      viewPost ? handleMarkerTouched(viewPost) : ""
+    })
 
     return (
         <>

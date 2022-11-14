@@ -16,21 +16,20 @@ import {
   FormControl,
   WarningOutlineIcon,
   Select,
-  CheckIcon,
+  Spinner,
 } from "native-base";
 import { Platform } from "react-native";
 import DismissKeyboardView from "../../components/dismissKeyboardView";
 
 import { db } from "../../firebase/firebaseConfig";
 import useAppStore from "../../store/useAppStore";
-import useImagePicker from "../../utils/useImagePicker";
 
 const SignUpScreen: React.FC = () => {
   const auth = getAuth();
 
   const setCurrentUser = useAppStore((state) => state.setCurrentUser);
-  const getImage = useImagePicker();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,6 +42,10 @@ const SignUpScreen: React.FC = () => {
   }, [password, confirmPassword]);
 
   const handleSignUp = async () => {
+    if(!name || !email || !password || !classification || !confirmPassword) return
+
+    setIsLoading(true);
+
     const userCredentials = await createUserWithEmailAndPassword(auth, `${email}@tamu.edu`, password)
   
     await setDoc(doc(db, "users", userCredentials.user.uid), {
@@ -52,7 +55,7 @@ const SignUpScreen: React.FC = () => {
       uid: userCredentials.user.uid,
       profilePicURL: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
       posts: []
-    })
+    }).catch(() => setIsLoading(false))
 
     setCurrentUser({
       name,
@@ -185,7 +188,7 @@ const SignUpScreen: React.FC = () => {
               </VStack>
               <VStack marginY={2}>
                 <Button onPress={handleSignUp} colorScheme="success">
-                  Sign Up
+                  { !isLoading ? "Sign Up" : <Spinner color="white" /> }
                 </Button>
               </VStack>
             </FormControl>

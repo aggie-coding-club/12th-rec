@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 
-import { VStack, Text, Center, Input, Button, Image, ZStack, Link, Heading, InputRightAddon } from "native-base";
+import { VStack, Text, Center, Input, Button, Image, ZStack, Link, Heading, InputRightAddon, Spinner } from "native-base";
 import { Alert } from "react-native";
 import DismissKeyboardView from "../../components/dismissKeyboardView";
 
@@ -14,16 +14,23 @@ interface Props {
 }
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {    
+    const [isLoading, setIsLoading] = useState(false)
+    
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
     const handleLogin = async () => {
         if(!email[0] || !password[0]) return
 
+        setIsLoading(true)
+
         const auth = getAuth(app);
 
         await signInWithEmailAndPassword(auth, `${email}@tamu.edu`, password)
-            .catch((error) => Alert.alert("Incorrect username or password"))
+            .catch((error) => {
+                Alert.alert("Incorrect username or password");
+                setIsLoading(false);
+            })
     }
 
     const [fontsLoaded] = useFonts({
@@ -61,7 +68,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                             </VStack>
 
                             <VStack marginY={2}>
-                                <Button onPress={handleLogin} colorScheme="success">Sign in</Button>
+                                <Button onPress={handleLogin} colorScheme="success">{!isLoading ? "Sign In" : <Spinner color="white" />}</Button>
                             </VStack>
                         </VStack> 
                     </VStack>  

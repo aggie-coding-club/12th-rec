@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import 'react-native-get-random-values';
 import { v4 as uuid } from "uuid";
 
-import { Box, Button, Heading, Input, TextArea, Text, VStack, HStack, Select } from "native-base";
+import { Box, Button, Heading, Input, TextArea, Text, VStack, HStack, Select, Spinner } from "native-base";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import coordinates from "../../utils/coordinates";
@@ -11,11 +12,16 @@ import useAppStore from "../../store/useAppStore";
 import { db } from "../../firebase/firebaseConfig";
 import DismissKeyboardView from "../../components/dismissKeyboardView";
 
-const CreatePosts: React.FC = () => {
+interface Props {
+    navigation: NativeStackNavigationProp<any, any>
+}
+
+const CreatePosts: React.FC<Props> = ({ navigation }) => {
     const currentUser = useAppStore((state) => state.currentUser)
     const setCurrentUser = useAppStore((state) => state.setCurrentUser)
     const setPosts = useAppStore((state) => state.setPosts)
 
+    const [isLoading, setIsLoading] = useState(false);
     const [title, setTitle] = useState<string>();
     const [location, setLocation] = useState<string>();
     const [dateTime, setDateTime] = useState<Date>(new Date());
@@ -27,8 +33,9 @@ const CreatePosts: React.FC = () => {
       };
     
     const createPost = async () => {
-
         if(!title || !location || !dateTime || !description) return
+
+        setIsLoading(true)
 
         const postID = uuid();
 
@@ -44,10 +51,15 @@ const CreatePosts: React.FC = () => {
             ...currentUser,
             posts: [...currentUser.posts, postID]
         })]).then(() => {
+            setIsLoading(false)
+
+            // @ts-ignore
             setPosts([{ title, location, coordinates: coordinates[location], dateTime: dateTime.toISOString(), description, userID: currentUser.uid }])
 
             setCurrentUser({ ...currentUser, posts: [...currentUser.posts, postID] })
-        })
+
+            navigation.navigate("HomeScreen", { viewPost: { title, location, coordinates: coordinates[location], dateTime: dateTime.toISOString(), description, userID: currentUser.uid } })
+        }).catch(() => setIsLoading(false))
     }
 
     return (
@@ -99,7 +111,7 @@ const CreatePosts: React.FC = () => {
                     </VStack>
 
                     <VStack marginY={2}>
-                        <Button backgroundColor="maroon" onPress={createPost}>Create Post</Button>
+                        <Button backgroundColor="maroon" onPress={createPost}>{ !isLoading ? "Create Post" : <Spinner color="white" /> }</Button>
                     </VStack>
                 </VStack>
             </Box>
